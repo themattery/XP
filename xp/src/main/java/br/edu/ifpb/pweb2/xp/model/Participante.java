@@ -20,11 +20,9 @@ public class Participante {
 
     private String nome;
 
-    private String email;
-
     private Boolean admin;
 
     @ManyToMany
-    private List<Corrida> corridasFeitas;
+    private List<Corrida> corridas;
 
 }

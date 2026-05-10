@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XP Corridas - Login</title>
+
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="login-screen">
+
+    <div class="login-screen__top"></div>
+
+    <div class="login-screen__center">
+
+        <div class="login-screen__instructions">
+            <h1>XP Corridas</h1>
+            <span>
+                Clique no usuário para entrar
+            </span>
+        </div>
+
+        <div class="login-screen__accounts">
+
+            <div class="login-screen__account">
+
+                <div class="login-screen__account-icon">
+                    👤
+                </div>
+
+                <div class="login-screen__account-details">
+
+                    <span class="login-screen__account-name">
+                        Participante
+                    </span>
+
+                    <div class="login-screen__password">
+
+                        <form th:action="@{/login}" method="post">
+
+                            <input
+                                    type="text"
+                                    name="nome"
+                                    id="nome"
+                                    placeholder="Digite seu nome"
+                                    required>
+
+                            <button
+                                    class="login-screen__submit"
+                                    type="submit">
+
+                                Entrar
+
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="login-screen__bottom">
+
+        <div class="login-screen__login-info">
+
+            <span>
+                XP Corridas © IFPB PWEB2
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
