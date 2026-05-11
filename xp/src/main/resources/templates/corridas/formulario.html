@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>XP Corridas - Nova Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+
+        .login-screen__center {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .form-header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        /* Container do Formulário (Estilo Janela de Diálogo) */
+        .form-content {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00489a;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Tahoma', sans-serif;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            color: #00489a;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+            box-sizing: border-box; /* Garante que o padding não estoure a largura */
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0058e3;
+            box-shadow: 0 0 5px rgba(0,88,227,0.3);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .btn-cancelar {
+            color: #666;
+            text-decoration: none;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 0.9em;
+        }
+
+        .btn-cancelar:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-screen">
+        <div class="login-screen__top"></div>
+
+        <div class="login-screen__center">
+            
+            <div class="form-header">
+                <h1>🆕 Nova Corrida</h1>
+                <p>Preencha os dados abaixo para criar o evento</p>
+            </div>
+
+            <div class="form-content">
+                <form th:action="@{/corridas/salvar}" th:object="${corrida}" method="post">
+                    
+                    <div class="form-group">
+                        <label for="nome">Nome da Corrida:</label>
+                        <input type="text" 
+                               th:field="*{nome}" 
+                               id="nome" 
+                               placeholder="Ex: Grande Prêmio de Interlagos" 
+                               required>
+                    </div>
+
+                    <div class="button-group">
+                        <a href="/corridas" class="btn-cancelar">Voltar ao Lobby</a>
+                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;">
+                            Salvar Corrida
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="login-screen__bottom">
+            <div class="login-screen__login-info">
+                <span>XP Corridas © IFPB PWEB2</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>XP Corridas - Lobby</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <style>
+        /* Reset de margens para garantir que o layout ocupe a tela toda */
+        body, html { margin: 0; padding: 0; height: 100%; }
+
+        /* Centralização vertical do conteúdo */
+        .login-screen__center {
+            flex-direction: column;
+            justify-content: center; /* Centraliza verticalmente */
+            align-items: center;     /* Centraliza horizontalmente */
+            padding: 20px;
+        }
+
+        /* Estilização do Título (Topo) */
+        .lobby-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .lobby-header h1 {
+            font-size: 3em;
+            margin: 0;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        /* Container da Tabela (Maior e Centralizado) */
+        .lobby-content {
+            width: 85%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.9); /* Fundo claro para contraste */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00489a;
+        }
+
+        /* Tabela Estilo Windows XP */
+        .xp-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #333;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        .xp-table thead th {
+            background: linear-gradient(to bottom, #0058e3 0%, #00489a 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #003366;
+        }
+
+        .xp-table tbody td {
+            padding: 15px;
+            border: 1px solid #ccc;
+            background: white;
+        }
+
+        .xp-table tbody tr:hover td {
+            background-color: #f0f7ff;
+        }
+
+        /* Alinhamento do botão de Admin */
+        .admin-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-screen">
+        <div class="login-screen__top"></div>
+
+        <div class="login-screen__center">
+            
+            <div class="lobby-header">
+                <h1>🏁 Lobby de Corridas</h1>
+                <p style="font-size: 1.2em;">Escolha uma corrida ativa para participar</p>
+            </div>
+
+            <div class="lobby-content">
+                
+                <div class="admin-actions">
+                    <a th:if="${session.usuarioAdmin == true}" 
+                       href="/corridas/novo" 
+                       class="login-screen__submit" 
+                       style="text-decoration: none; padding: 8px 20px;">
+                        + Nova Corrida
+                    </a>
+                </div>
+
+                <table class="xp-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome da Corrida</th>
+                            <th style="text-align: center;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="corrida : ${corridas}">
+                            <td th:text="${corrida.id}" style="font-weight: bold; width: 50px;">1</td>
+                            <td th:text="${corrida.nome}">Grande Prêmio XP</td>
+                            <td style="text-align: center; width: 120px;">
+                                <button class="login-screen__submit" style="width: 100%;">Entrar</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(corridas)}">
+                            <td colspan="3" style="text-align: center; padding: 40px; color: #666;">
+                                Nenhuma corrida disponível no momento.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="login-screen__bottom">
+            <div class="login-screen__login-info">
+                <span>XP Corridas © IFPB PWEB2</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
