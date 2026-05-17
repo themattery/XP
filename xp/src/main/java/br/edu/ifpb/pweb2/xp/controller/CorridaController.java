@@ -48,7 +48,9 @@ public class CorridaController {
 
         session.setAttribute("corridaId", id);
         session.setAttribute("tempoInicioCorrida", LocalDateTime.now());
+        session.setAttribute("perguntaIndice", 0);
+        session.setAttribute("acertos", 0);
 
-        return "redirect:/corridas";
+        return "redirect:/corridas/jogar";
     }
 }

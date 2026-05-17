@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>XP Corridas - Resultado</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+
+        .login-screen__center {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .jogo-header {
+            text-align: center;
+            margin-bottom: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: Tahoma, sans-serif;
+        }
+
+        .jogo-header h1 { margin: 0; font-size: 2.4em; }
+
+        .jogo-content {
+            width: 90%;
+            max-width: 560px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 36px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00489a;
+            color: #333;
+            font-family: Tahoma, sans-serif;
+            text-align: center;
+        }
+
+        .resultado-pontos {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #00489a;
+            margin: 16px 0;
+        }
+
+        .feedback {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .feedback--ok {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .feedback--erro {
+            background: #ffebee;
+            border: 1px solid #e53935;
+            color: #c62828;
+        }
+
+        .jogo-actions {
+            margin-top: 28px;
+        }
+
+        .jogo-actions a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 10px 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="login-screen">
+    <div class="login-screen__top"></div>
+
+    <div class="login-screen__center">
+
+        <div class="jogo-header">
+            <h1>🏁 Corrida finalizada!</h1>
+            <p th:text="${corrida.nome}">Nome da corrida</p>
+        </div>
+
+        <div class="jogo-content">
+
+            <div th:if="${feedbackMensagem != null}"
+                 class="feedback"
+                 th:classappend="${feedbackCorreto} ? ' feedback--ok' : ' feedback--erro'"
+                 th:text="${feedbackMensagem}">
+                Feedback da última pergunta
+            </div>
+
+            <p th:if="${total == 0}">Esta corrida ainda não possui perguntas cadastradas.</p>
+
+            <div th:if="${total > 0}">
+                <p>Você acertou</p>
+                <p class="resultado-pontos" th:text="${acertos} + ' / ' + ${total}">0 / 0</p>
+                <p th:if="${tempoInicio != null}"
+                   th:text="'Início: ' + ${#temporals.format(tempoInicio, 'dd/MM/yyyy HH:mm')}">
+                    Início da corrida
+                </p>
+            </div>
+
+            <div class="jogo-actions">
+                <a th:href="@{/corridas}" class="login-screen__submit">Voltar ao lobby</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="login-screen__bottom">
+        <div class="login-screen__login-info">
+            <span>XP Corridas © IFPB PWEB2</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
