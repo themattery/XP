@@ -154,11 +154,14 @@
                         <tr th:each="corrida : ${corridas}">
                             <td th:text="${corrida.id}" style="font-weight: bold; width: 50px;">1</td>
                             <td th:text="${corrida.nome}">Grande Prêmio XP</td>
-                            <td style="text-align: center; min-width: 220px;">
+                            <td style="text-align: center; min-width: 320px;">
                                 <div class="acoes-corrida">
                                     <form th:action="@{/corridas/{id}/iniciar(id=${corrida.id})}" method="post">
                                         <button type="submit" class="login-screen__submit btn-admin">Iniciar</button>
                                     </form>
+                                    <a th:if="${session.usuarioAdmin == true}"
+                                       th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}"
+                                       class="btn-admin btn-admin--editar">Perguntas</a>
                                     <a th:if="${session.usuarioAdmin == true}"
                                        th:href="@{/corridas/{id}/editar(id=${corrida.id})}"
                                        class="btn-admin btn-admin--editar">Editar</a>

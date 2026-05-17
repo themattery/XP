@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>XP Corridas - Perguntas</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+
+        .login-screen__center {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 24px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-family: Tahoma, sans-serif;
+        }
+
+        .page-header h1 { margin: 0 0 8px; font-size: 2.2em; }
+
+        .page-content {
+            width: 95%;
+            max-width: 960px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 28px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00489a;
+            color: #333;
+            font-family: Tahoma, sans-serif;
+        }
+
+        .lobby-mensagem {
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .admin-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .xp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .xp-table thead th {
+            background: linear-gradient(to bottom, #0058e3 0%, #00489a 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #003366;
+        }
+
+        .xp-table tbody td {
+            padding: 12px;
+            border: 1px solid #ccc;
+            background: white;
+            vertical-align: top;
+        }
+
+        .xp-table tbody tr:hover td {
+            background-color: #f0f7ff;
+        }
+
+        .alternativas-lista {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .alternativas-lista li.correta {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .btn-admin {
+            text-decoration: none;
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border: none;
+            cursor: pointer;
+            font-family: Tahoma, sans-serif;
+        }
+
+        .btn-admin--excluir {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #e53935;
+        }
+
+        .btn-voltar {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.95em;
+        }
+
+        .btn-voltar:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="login-screen">
+    <div class="login-screen__top"></div>
+
+    <div class="login-screen__center">
+
+        <div class="page-header">
+            <h1>❓ Perguntas</h1>
+            <p th:text="'Corrida: ' + ${corrida.nome}">Corrida</p>
+        </div>
+
+        <div class="page-content">
+
+            <p th:if="${mensagem != null}" class="lobby-mensagem" th:text="${mensagem}"></p>
+
+            <div class="admin-actions">
+                <a th:href="@{/corridas}" class="btn-voltar">← Voltar ao lobby</a>
+                <a th:href="@{/corridas/{id}/perguntas/novo(id=${corrida.id})}"
+                   class="login-screen__submit"
+                   style="text-decoration: none; padding: 8px 20px;">
+                    + Nova Pergunta
+                </a>
+            </div>
+
+            <table class="xp-table">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">ID</th>
+                        <th>Enunciado</th>
+                        <th>Alternativas</th>
+                        <th style="width: 100px; text-align: center;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pergunta : ${perguntas}">
+                        <td th:text="${pergunta.id}">1</td>
+                        <td th:text="${pergunta.enunciado}">Enunciado</td>
+                        <td>
+                            <ul class="alternativas-lista">
+                                <li th:each="alt, stat : ${pergunta.alternativas}"
+                                    th:text="${stat.index + 1} + ') ' + ${alt}"
+                                    th:classappend="${stat.index == pergunta.respostaCorreta} ? ' correta' : ''">
+                                    Alternativa
+                                </li>
+                            </ul>
+                        </td>
+                        <td style="text-align: center;">
+                            <form th:action="@{/corridas/{cid}/perguntas/{pid}/excluir(cid=${corrida.id}, pid=${pergunta.id})}"
+                                  method="post"
+                                  onsubmit="return confirm('Excluir esta pergunta?');">
+                                <button type="submit" class="btn-admin btn-admin--excluir">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(perguntas)}">
+                        <td colspan="4" style="text-align: center; padding: 32px; color: #666;">
+                            Nenhuma pergunta cadastrada para esta corrida.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="login-screen__bottom">
+        <div class="login-screen__login-info">
+            <span>XP Corridas © IFPB PWEB2</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>
