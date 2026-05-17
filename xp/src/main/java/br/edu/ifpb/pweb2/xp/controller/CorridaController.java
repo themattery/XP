@@ -10,35 +10,75 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 
-@Controller 
+@Controller
 @RequestMapping("/corridas")
 public class CorridaController {
-    
+
+    private static final String SESSAO_ADMIN = "usuarioAdmin";
+
     @Autowired
     private CorridaService service;
 
     @GetMapping
     public ModelAndView lobby(ModelAndView model) {
-
-        // Adiciona a lista de corridas para ser usada no HTML
         model.addObject("corridas", service.listarTodas());
         model.setViewName("corridas/lobby");
         return model;
     }
 
     @GetMapping("/novo")
-    public ModelAndView formularioCadastro(ModelAndView model) {
-        model.addObject("corrida", new Corrida()); // Para o formulário de cadastro
-        model.setViewName("corridas/formulario");
+    public ModelAndView formularioCadastro(HttpSession session) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return new ModelAndView(redirect);
+        }
+
+        ModelAndView model = new ModelAndView("corridas/formulario");
+        model.addObject("corrida", new Corrida());
+        model.addObject("edicao", false);
+        return model;
+    }
+
+    @GetMapping("/{id}/editar")
+    public ModelAndView formularioEdicao(@PathVariable Long id, HttpSession session) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return new ModelAndView(redirect);
+        }
+
+        ModelAndView model = new ModelAndView("corridas/formulario");
+        model.addObject("corrida", service.buscarPorId(id));
+        model.addObject("edicao", true);
         return model;
     }
 
     @PostMapping("/salvar")
-    public String salvar(Corrida corrida) {
+    public String salvar(Corrida corrida, HttpSession session, RedirectAttributes redirectAttributes) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return redirect;
+        }
+
+        boolean nova = corrida.getId() == null;
         service.salvar(corrida);
+        redirectAttributes.addFlashAttribute("mensagem",
+                nova ? "Corrida cadastrada com sucesso." : "Corrida atualizada com sucesso.");
+        return "redirect:/corridas";
+    }
+
+    @PostMapping("/{id}/excluir")
+    public String excluir(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return redirect;
+        }
+
+        service.excluir(id);
+        redirectAttributes.addFlashAttribute("mensagem", "Corrida excluída com sucesso.");
         return "redirect:/corridas";
     }
 
@@ -53,4 +93,12 @@ public class CorridaController {
 
         return "redirect:/corridas/jogar";
     }
+
+    private String exigirAdmin(HttpSession session) {
+        if (!Boolean.TRUE.equals(session.getAttribute(SESSAO_ADMIN))) {
+            return "redirect:/corridas";
+        }
+        return null;
+    }
+
 }

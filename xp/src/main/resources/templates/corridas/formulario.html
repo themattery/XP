@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>XP Corridas - Nova Corrida</title>
+    <title th:text="${edicao} ? 'XP Corridas - Editar Corrida' : 'XP Corridas - Nova Corrida'">XP Corridas</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
         body, html { margin: 0; padding: 0; height: 100%; }
@@ -93,13 +93,17 @@
         <div class="login-screen__center">
             
             <div class="form-header">
-                <h1>🆕 Nova Corrida</h1>
-                <p>Preencha os dados abaixo para criar o evento</p>
+                <h1 th:text="${edicao} ? '✏️ Editar Corrida' : '🆕 Nova Corrida'">Nova Corrida</h1>
+                <p th:text="${edicao} ? 'Altere o nome da corrida' : 'Preencha os dados abaixo para criar o evento'">
+                    Preencha os dados abaixo
+                </p>
             </div>
 
             <div class="form-content">
                 <form th:action="@{/corridas/salvar}" th:object="${corrida}" method="post">
-                    
+
+                    <input type="hidden" th:field="*{id}">
+
                     <div class="form-group">
                         <label for="nome">Nome da Corrida:</label>
                         <input type="text" 
@@ -111,7 +115,8 @@
 
                     <div class="button-group">
                         <a href="/corridas" class="btn-cancelar">Voltar ao Lobby</a>
-                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;">
+                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;"
+                                th:text="${edicao} ? 'Atualizar Corrida' : 'Salvar Corrida'">
                             Salvar Corrida
                         </button>
                     </div>
