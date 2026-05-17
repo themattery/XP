@@ -3,7 +3,10 @@ package br.edu.ifpb.pweb2.xp.service;
 import br.edu.ifpb.pweb2.xp.model.Corrida;
 import br.edu.ifpb.pweb2.xp.repository.CorridaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 @Service
@@ -17,5 +20,10 @@ public class CorridaService {
 
     public void salvar(Corrida corrida) {
         repository.save(corrida);
+    }
+
+    public Corrida buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Corrida não encontrada"));
     }
 }

@@ -1,14 +1,17 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-
 import br.edu.ifpb.pweb2.xp.model.Corrida;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.time.LocalDateTime;
 
 @Controller 
 @RequestMapping("/corridas")
@@ -36,6 +39,16 @@ public class CorridaController {
     @PostMapping("/salvar")
     public String salvar(Corrida corrida) {
         service.salvar(corrida);
+        return "redirect:/corridas";
+    }
+
+    @PostMapping("/{id}/iniciar")
+    public String iniciar(@PathVariable Long id, HttpSession session) {
+        service.buscarPorId(id);
+
+        session.setAttribute("corridaId", id);
+        session.setAttribute("tempoInicioCorrida", LocalDateTime.now());
+
         return "redirect:/corridas";
     }
 }
