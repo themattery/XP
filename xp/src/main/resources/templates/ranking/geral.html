@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ranking Geral</title>
+</head>
+<body>
+<h1>Ranking Geral</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Posição</th>
+        <th>Participante</th>
+        <th>Corrida</th>
+        <th>Pontuação</th>
+        <th>Data</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="r, stat : ${resultados}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${r.participante.nome}"></td>
+        <td th:text="${r.corrida.nome}"></td>
+        <td th:text="${r.pontuacao}"></td>
+        <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
