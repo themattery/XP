@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>XP Corridas - Lobby</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
         /* Reset de margens para garantir que o layout ocupe a tela toda */
-        body, html { margin: 0; padding: 0; height: 100%; }
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
         /* Centralização vertical do conteúdo */
         .login-screen__center {
             flex-direction: column;
-            justify-content: center; /* Centraliza verticalmente */
-            align-items: center;     /* Centraliza horizontalmente */
+            justify-content: center;
+            /* Centraliza verticalmente */
+            align-items: center;
+            /* Centraliza horizontalmente */
             padding: 20px;
         }
 
@@ -21,7 +29,7 @@
             text-align: center;
             margin-bottom: 40px;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .lobby-header h1 {
@@ -34,10 +42,11 @@
         .lobby-content {
             width: 85%;
             max-width: 900px;
-            background: rgba(255, 255, 255, 0.9); /* Fundo claro para contraste */
+            background: rgba(255, 255, 255, 0.9);
+            /* Fundo claro para contraste */
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border: 2px solid #00489a;
         }
 
@@ -116,14 +125,56 @@
             color: #c62828;
             border: 1px solid #e53935;
         }
+
+        /* Botão logout */
+        .logout-container {
+            position: fixed;
+            right: 30px;
+            bottom: 25px;
+            z-index: 999;
+        }
+
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            background: linear-gradient(to bottom, #ff4d4d 0%, #cc0000 100%);
+            color: white;
+
+            padding: 12px 22px;
+
+            border-radius: 8px;
+            border: 1px solid #7a0000;
+
+            text-decoration: none;
+
+            font-family: Tahoma, sans-serif;
+            font-size: 1.1em;
+            font-weight: bold;
+
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+
+            transition: all 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background: linear-gradient(to bottom, #ff6666 0%, #990000 100%);
+            transform: scale(1.05);
+        }
+
+        .logout-button:active {
+            transform: scale(0.97);
+        }
     </style>
 </head>
+
 <body>
     <div class="login-screen">
         <div class="login-screen__top"></div>
 
         <div class="login-screen__center">
-            
+
             <div class="lobby-header">
                 <h1>🏁 Lobby de Corridas</h1>
                 <p style="font-size: 1.2em;">Escolha uma corrida ativa para participar</p>
@@ -134,10 +185,8 @@
                 <p th:if="${mensagem != null}" class="lobby-mensagem" th:text="${mensagem}"></p>
 
                 <div class="admin-actions">
-                    <a th:if="${session.usuarioAdmin == true}" 
-                       href="/corridas/novo" 
-                       class="login-screen__submit" 
-                       style="text-decoration: none; padding: 8px 20px;">
+                    <a th:if="${session.usuarioAdmin == true}" href="/corridas/novo" class="login-screen__submit"
+                        style="text-decoration: none; padding: 8px 20px;">
                         + Nova Corrida
                     </a>
                 </div>
@@ -160,15 +209,14 @@
                                         <button type="submit" class="login-screen__submit btn-admin">Iniciar</button>
                                     </form>
                                     <a th:if="${session.usuarioAdmin == true}"
-                                       th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}"
-                                       class="btn-admin btn-admin--editar">Perguntas</a>
+                                        th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}"
+                                        class="btn-admin btn-admin--editar">Perguntas</a>
                                     <a th:if="${session.usuarioAdmin == true}"
-                                       th:href="@{/corridas/{id}/editar(id=${corrida.id})}"
-                                       class="btn-admin btn-admin--editar">Editar</a>
+                                        th:href="@{/corridas/{id}/editar(id=${corrida.id})}"
+                                        class="btn-admin btn-admin--editar">Editar</a>
                                     <form th:if="${session.usuarioAdmin == true}"
-                                          th:action="@{/corridas/{id}/excluir(id=${corrida.id})}"
-                                          method="post"
-                                          onsubmit="return confirm('Excluir esta corrida e todas as perguntas vinculadas?');">
+                                        th:action="@{/corridas/{id}/excluir(id=${corrida.id})}" method="post"
+                                        onsubmit="return confirm('Excluir esta corrida e todas as perguntas vinculadas?');">
                                         <button type="submit" class="btn-admin btn-admin--excluir">Excluir</button>
                                     </form>
                                 </div>
@@ -184,11 +232,20 @@
             </div>
         </div>
 
+        <div class="logout-container">
+            <a th:href="@{/auth/logout}" class="logout-button">
+                ⎋ Sair
+            </a>
+        </div>
+
+
         <div class="login-screen__bottom">
             <div class="login-screen__login-info">
                 <span>XP Corridas © IFPB PWEB2</span>
             </div>
         </div>
     </div>
+
 </body>
+
 </html>
