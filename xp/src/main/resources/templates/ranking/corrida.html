@@ -1,30 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Ranking da Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/ranking.css}">
 </head>
 <body>
-<h1 th:text="'Ranking - ' + ${corrida.nome}"></h1>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Posição</th>
-        <th>Participante</th>
-        <th>Pontuação</th>
-        <th>Data</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="r, stat : ${resultados}">
-        <td th:text="${stat.count}"></td>
-        <td th:text="${r.participante.nome}"></td>
-        <td th:text="${r.pontuacao}"></td>
-        <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="xp-window">
+    <div class="xp-titlebar">
+        <span>🏁 Histórico do Circuito - Windows XP</span>
+        <div class="xp-min-max-close">
+            <div class="xp-sys-btn close" onclick="window.location.href='/corridas'">X</div>
+        </div>
+    </div>
+
+    <div class="xp-menu-bar">
+        <a th:href="@{/corridas}" class="xp-button" style="font-size: 11px;">⬅️ Voltar para o Lobby</a>
+        <span style="margin-left: auto; font-weight: bold; color: #003099;">
+            👤 Piloto: <span th:text="${usuarioLogado}">Usuário</span>
+        </span>
+    </div>
+
+    <div class="xp-body">
+        <h2 class="xp-header-title" th:text="'Ranking - ' + ${corrida.nome}">Ranking - Corrida</h2>
+
+        <table class="xp-table">
+            <thead>
+            <tr>
+                <th style="width: 60px;">Posição</th>
+                <th>Participante</th>
+                <th>Pontuação</th>
+                <th>Data</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r, stat : ${resultados}">
+                <td th:text="${stat.count}" style="font-weight: bold;">1</td>
+                <td th:text="${r.participante.nome}">Nome</td>
+                <td th:text="${r.pontuacao} + ' pts'">0</td>
+                <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}">Data</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </body>
 </html>

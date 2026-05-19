@@ -13,8 +13,12 @@ public class Corrida {
 
     private String nome;
 
+<<<<<<< HEAD
     private String descricao;
 
     private Integer tempoLimitadoSegundos;
+=======
+    private Integer tempoLimiteSegundos;
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 
 }

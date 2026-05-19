@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface ParticipanteRepository extends JpaRepository<Participante, Long> {
     Optional<Participante> findByNome(String nome);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878

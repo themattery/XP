@@ -1,10 +1,19 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
 import br.edu.ifpb.pweb2.xp.model.Pergunta;
+<<<<<<< HEAD
 import br.edu.ifpb.pweb2.xp.repository.ParticipanteRepository;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import br.edu.ifpb.pweb2.xp.service.ResultadoService;
+=======
+import br.edu.ifpb.pweb2.xp.model.Corrida;
+import br.edu.ifpb.pweb2.xp.model.Participante;
+import br.edu.ifpb.pweb2.xp.service.CorridaService;
+import br.edu.ifpb.pweb2.xp.service.PerguntaService;
+import br.edu.ifpb.pweb2.xp.service.ResultadoService;
+
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+<<<<<<< HEAD
+=======
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 import java.util.List;
 
 @Controller
@@ -35,14 +49,21 @@ public class JogoController {
     @Autowired
     private ResultadoService resultadoService;
 
+<<<<<<< HEAD
     @Autowired
     private ParticipanteRepository participanteRepository;
 
+=======
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
     @GetMapping
     public ModelAndView exibirPergunta(HttpSession session) {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
         if (corridaId == null) {
             return new ModelAndView("redirect:/corridas");
+        }
+
+        if (tempoExpirado(session)) {
+            return new ModelAndView("redirect:/corridas/jogar/fim");
         }
 
         List<Pergunta> perguntas = perguntaService.listarPorCorrida(corridaId);
@@ -77,6 +98,10 @@ public class JogoController {
             return "redirect:/corridas";
         }
 
+        if (tempoExpirado(session)) {
+            return "redirect:/corridas/jogar/fim";
+        }
+
         List<Pergunta> perguntas = perguntaService.listarPorCorrida(corridaId);
         int indice = indiceAtual(session);
 
@@ -97,7 +122,7 @@ public class JogoController {
             redirectAttributes.addFlashAttribute("feedbackMensagem", "Resposta correta!");
         } else {
             redirectAttributes.addFlashAttribute("feedbackCorreto", false);
-            redirectAttributes.addFlashAttribute("feedbackMensagem", mensagemRespostaIncorreta(perguntaAtual));
+            redirectAttributes.addFlashAttribute("feedbackMensagem", "Resposta incorreta.");
         }
 
         session.setAttribute(SESSAO_PERGUNTA_INDICE, indice + 1);
@@ -112,9 +137,15 @@ public class JogoController {
     @GetMapping("/fim")
     public ModelAndView fim(HttpSession session) {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
+<<<<<<< HEAD
         Long participanteId = (Long) session.getAttribute("participanteId");
         
         if (corridaId == null || participanteId == null) {
+=======
+        String nomeUsuario = (String) session.getAttribute("usuario");
+
+        if (corridaId == null || nomeUsuario == null) {
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
             return new ModelAndView("redirect:/corridas");
         }
 
@@ -122,6 +153,7 @@ public class JogoController {
         int total = perguntas.size();
         int acertos = acertosAtuais(session);
 
+<<<<<<< HEAD
         // Salvar resultado no banco de dados
         try {
             var participante = participanteRepository.findById(participanteId).orElse(null);
@@ -143,9 +175,30 @@ public class JogoController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+=======
+        Corrida corrida = corridaService.buscarPorId(corridaId);
+
+        // --- SALVAMENTO SEGURO VIA ATRIBUTOS DE SESSÃO ---
+        try {
+            BigDecimal pontuacaoBigDecimal = new BigDecimal(acertos);
+
+            // Instancia o objeto do Participante e injeta o nome vindo da sessão.
+            // O seu ResultadoService irá receber esta entidade de forma limpa.
+            Participante participante = new Participante();
+            participante.setNome(nomeUsuario);
+            participante.setAdmin("admin".equalsIgnoreCase(nomeUsuario));
+
+            // Chama o método do service passando os parâmetros exatos esperados
+            resultadoService.salvar(participante, corrida, pontuacaoBigDecimal);
+
+        } catch (Exception e) {
+            System.err.println("Erro ao persistir o resultado no ranking: " + e.getMessage());
+        }
+        // -------------------------------------------------
+>>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 
         ModelAndView model = new ModelAndView("corridas/jogar/fim");
-        model.addObject("corrida", corridaService.buscarPorId(corridaId));
+        model.addObject("corrida", corrida);
         model.addObject("total", total);
         model.addObject("acertos", acertos);
         model.addObject("tempoInicio", session.getAttribute("tempoInicioCorrida"));
@@ -162,14 +215,15 @@ public class JogoController {
         return acertos != null ? acertos : 0;
     }
 
-    private String mensagemRespostaIncorreta(Pergunta pergunta) {
-        var alternativas = pergunta.getAlternativas();
-        Integer indiceCorreto = pergunta.getRespostaCorreta();
-        if (alternativas != null && indiceCorreto != null
-                && indiceCorreto >= 0 && indiceCorreto < alternativas.size()) {
-            return "Resposta incorreta. A alternativa certa era: " + alternativas.get(indiceCorreto);
-        }
-        return "Resposta incorreta.";
-    }
+    private boolean tempoExpirado(HttpSession session) {
+        Integer tempoLimiteSegundos = (Integer) session.getAttribute("tempoLimiteSegundos");
+        LocalDateTime tempoInicio = (LocalDateTime) session.getAttribute("tempoInicioCorrida");
 
+        if (tempoLimiteSegundos == null || tempoInicio == null) {
+            return false;
+        }
+
+        long segundosDecorridos = ChronoUnit.SECONDS.between(tempoInicio, LocalDateTime.now());
+        return segundosDecorridos >= tempoLimiteSegundos;
+    }
 }

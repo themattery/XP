@@ -6,6 +6,7 @@ import br.edu.ifpb.pweb2.xp.model.Resultado;
 import br.edu.ifpb.pweb2.xp.repository.ResultadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,10 +17,16 @@ public class ResultadoService {
 
     @Autowired
     private ResultadoRepository repository;
+    
+    @Autowired
+    private ParticipanteService participanteService; // Injete o novo service
 
+    @Transactional
     public Resultado salvar(Participante participante, Corrida corrida, BigDecimal pontuacao) {
+        Participante participantePersistido = participanteService.buscarOuCriar(participante.getNome());
+        
         Resultado resultado = new Resultado();
-        resultado.setParticipante(participante);
+        resultado.setParticipante(participantePersistido);
         resultado.setCorrida(corrida);
         resultado.setPontuacao(pontuacao);
         resultado.setDataHora(LocalDateTime.now());
