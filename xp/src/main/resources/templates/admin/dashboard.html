@@ -1,297 +1,300 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Administração</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>XP Corridas - Dashboard Admin</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
 
-        .admin-container {
-            min-height: 100vh;
-            display: flex;
+        .login-screen__center {
             flex-direction: column;
-        }
-
-        .admin-header {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .admin-header h1 { font-size: 1.8em; }
-        .admin-header .user-info { font-size: 0.95em; }
-        .admin-header a { color: #fff; text-decoration: none; margin-left: 20px; }
-
-        .admin-content {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .admin-sidebar {
-            width: 200px;
-            background: rgba(0, 0, 0, 0.1);
             padding: 20px;
-            border-right: 2px solid rgba(255, 255, 255, 0.1);
         }
 
-        .admin-sidebar a {
-            display: block;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: rgba(255, 255, 255, 0.15);
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
             color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background 0.3s;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .admin-sidebar a:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            font-family: 'Tahoma', sans-serif;
         }
 
-        .admin-main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 30px;
+        .dashboard-header p {
+            font-size: 1em;
+            margin-top: 5px;
+            font-family: 'Tahoma', sans-serif;
         }
 
-        .admin-section {
-            margin-bottom: 40px;
-        }
-
-        .admin-section h2 {
-            color: white;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .section-actions {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            background: #00489a;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.95em;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #003366;
-        }
-
-        .btn--secondary {
-            background: #6c757d;
-        }
-
-        .btn--secondary:hover {
-            background: #5a6268;
-        }
-
-        .btn--danger {
-            background: #e53935;
-        }
-
-        .btn--danger:hover {
-            background: #c62828;
-        }
-
-        .table-responsive {
+        .dashboard-content {
+            width: 90%;
+            max-width: 1000px;
             background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
             border-radius: 8px;
-            overflow: auto;
-            max-height: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #00489a;
         }
 
-        table {
+        /* Cards de estatísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(to bottom, #f8f7f0, #e8e4d8);
+            border: 1px solid #aca899;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: inset 1px 1px 0 #fff, 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #0054e3;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #333;
+            margin-top: 3px;
+            font-family: 'Tahoma', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Botões estilo XP */
+        .btn-xp {
+            display: inline-block;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000 !important;
+            background: linear-gradient(to bottom, #ffffff 0%, #f0f0ea 70%, #e2e2d4 100%);
+            border: 1px solid #707070;
+            border-radius: 3px;
+            padding: 4px 10px;
+            cursor: pointer;
+            box-shadow: inset -1px -1px 1px #999999, 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-xp:hover {
+            background: linear-gradient(to bottom, #fff8dd 0%, #ffeeb5 70%, #ffdd75 100%);
+            border-color: #ffb515;
+        }
+
+        .btn-xp-green {
+            background: linear-gradient(to bottom, #9cd867 0%, #70b33b 70%, #559624 100%);
+            border-color: #3b6e16;
+            color: #ffffff !important;
+        }
+
+        .btn-xp-green:hover {
+            background: linear-gradient(to bottom, #b3e685 0%, #8cd154 70%, #6da838 100%);
+        }
+
+        .section-title {
+            font-family: 'Tahoma', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            color: #003c74;
+            margin: 15px 0 8px 0;
+            padding-bottom: 3px;
+            border-bottom: 2px solid #00489a;
+        }
+
+        /* Tabela estilo XP com espaçamento reduzido */
+        .xp-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9em;
+            margin-top: 5px;
         }
 
-        table th {
-            background: #00489a;
-            color: white;
-            padding: 12px;
+        .xp-table th {
+            background: linear-gradient(to bottom, #0058e3 0%, #00489a 100%);
+            color: #ffffff !important;
+            padding: 6px 8px;
             text-align: left;
-            position: sticky;
-            top: 0;
+            border: 1px solid #003366;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 11px;
+            font-weight: bold;
         }
 
-        table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+        .xp-table td {
+            padding: 5px 8px;
+            border: 1px solid #aca899;
+            background: #ffffff;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 11px;
+            color: #1a1a1a !important;
         }
 
-        table tr:hover {
-            background: #f5f5f5;
+        .xp-table tr:hover td {
+            background-color: #e8f0fe;
         }
 
+        /* Ações lado a lado */
         .table-actions {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 6px;
+            flex-wrap: nowrap;
+            white-space: nowrap;
         }
 
-        .table-actions a, .table-actions form {
-            display: inline;
-        }
-
-        .table-actions button {
-            padding: 6px 12px;
-            font-size: 0.85em;
-            border: none;
+        .table-actions a {
+            display: inline-block;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 10px;
+            color: #ffffff !important;
+            background: linear-gradient(to bottom, #0058e3, #00489a);
+            border: 1px solid #003366;
             border-radius: 3px;
+            padding: 2px 6px;
             cursor: pointer;
-            color: white;
         }
 
-        .edit-btn {
-            background: #0069d9;
+        .table-actions a:hover {
+            background: linear-gradient(to bottom, #1a6ef5, #0058e3);
+            border-color: #ffb515;
         }
 
-        .edit-btn:hover {
-            background: #0056b3;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 12px;
         }
 
-        .delete-btn {
-            background: #e53935;
-        }
-
-        .delete-btn:hover {
-            background: #c62828;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .empty-state p {
-            margin-bottom: 20px;
-            font-size: 1.1em;
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
     </style>
 </head>
+
 <body>
-<div class="admin-container">
-    <div class="admin-header">
-        <h1>🔧 Painel de Administração</h1>
-        <div class="user-info">
-            <span th:text="'Conectado como: ' + ${usuarioLogado}"></span>
-            <a href="/auth">Logout</a>
-        </div>
-    </div>
+    <div class="login-screen">
+        <div class="login-screen__top"></div>
 
-    <div class="admin-content">
-        <div class="admin-sidebar">
-            <a href="/admin/dashboard">📊 Dashboard</a>
-            <a href="/corridas">🏎️ Lobby</a>
-            <a href="/ranking">🏆 Ranking</a>
-        </div>
+        <div class="login-screen__center">
 
-        <div class="admin-main">
-            <!-- Seção de Corridas -->
-            <div class="admin-section">
-                <h2>🏎️ Corridas</h2>
-                <div class="section-actions">
-                    <a href="/corridas/novo" class="btn">+ Nova Corrida</a>
+            <div class="dashboard-header">
+                <h1>Dashboard do Administrador</h1>
+                <p>Gerencie corridas, perguntas e acompanhe estatísticas</p>
+            </div>
+
+            <div class="dashboard-content">
+
+                <a href="/corridas" class="btn-xp back-link">← Voltar ao Lobby</a>
+
+                <!-- Cards de estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${totalCorridas}">0</div>
+                        <div class="stat-label">Total de Corridas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${totalPerguntas}">0</div>
+                        <div class="stat-label">Total de Perguntas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${totalParticipantes}">0</div>
+                        <div class="stat-label">Participantes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${totalResultados}">0</div>
+                        <div class="stat-label">Resultados</div>
+                    </div>
                 </div>
 
-                <div th:if="${corridas.isEmpty()}" class="empty-state">
-                    <p>Nenhuma corrida cadastrada</p>
+                <!-- Ações rápidas -->
+                <div class="admin-actions">
+                    <a href="/corridas/novo" class="btn-xp btn-xp-green">+ Nova Corrida</a>
+                    <a href="/ranking" class="btn-xp"> Ranking Geral</a>
                 </div>
 
-                <div th:unless="${corridas.isEmpty()}" class="table-responsive">
-                    <table>
-                        <thead>
+                <!-- Lista de Corridas -->
+                <div class="section-title">Corridas Cadastradas</div>
+                <table class="xp-table">
+                    <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Descrição</th>
-                            <th>Ações</th>
-                        </tr>
+                            <th style="width: 40px;">ID</th>
+                            <th>Nome da Corrida</th>
+                            <th style="width: 50px;">Tempo</th>
+                            <th style="width: 130px;">Ações</th>
                         </thead>
-                        <tbody>
+                    <tbody>
                         <tr th:each="corrida : ${corridas}">
-                            <td th:text="${corrida.id}"></td>
-                            <td th:text="${corrida.nome}"></td>
-                            <td th:text="${corrida.descricao}"></td>
+                            <td th:text="${corrida.id}" style="font-weight: bold;">1</td>
+                            <td th:utext="${corrida.nome}" style="color: #1a1a1a;">Grande Premio XP</td>
+                            <td th:text="${corrida.tempoLimiteSegundos != null ? corrida.tempoLimiteSegundos + 's' : '60s'}">60s</td>
                             <td>
                                 <div class="table-actions">
-                                    <a href="#" th:href="@{/corridas/{id}/editar(id=${corrida.id})}" class="edit-btn">Editar</a>
-                                    <form method="post" th:action="@{/corridas/{id}/excluir(id=${corrida.id})}" style="display:inline;">
-                                        <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza?')">Excluir</button>
-                                    </form>
+                                    <a th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}"> Perguntas</a>
+                                    <a th:href="@{/corridas/{id}/editar(id=${corrida.id})}"> Editar</a>
                                 </div>
                             </td>
                         </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        <tr th:if="${#lists.isEmpty(corridas)}">
+                            <td colspan="4" style="text-align: center; padding: 20px; color: #666;">
+                                Nenhuma corrida cadastrada.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <!-- Seção de Perguntas -->
-            <div class="admin-section">
-                <h2>❓ Perguntas</h2>
-                <div class="section-actions">
-                    <a href="/corridas" class="btn">+ Nova Pergunta</a>
-                </div>
-
-                <div th:if="${perguntas.isEmpty()}" class="empty-state">
-                    <p>Nenhuma pergunta cadastrada</p>
-                </div>
-
-                <div th:unless="${perguntas.isEmpty()}" class="table-responsive">
-                    <table>
-                        <thead>
+                <!-- Últimos Resultados -->
+                <div class="section-title"> Últimos Resultados</div>
+                <table class="xp-table">
+                    <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Enunciado</th>
+                            <th>Participante</th>
                             <th>Corrida</th>
-                            <th>Alternativas</th>
-                            <th>Ações</th>
-                        </tr>
+                            <th style="width: 60px;">Pontuação</th>
+                            <th>Data</th>
                         </thead>
-                        <tbody>
-                        <tr th:each="pergunta : ${perguntas}">
-                            <td th:text="${pergunta.id}"></td>
-                            <td th:text="${pergunta.enunciado}"></td>
-                            <td th:text="${pergunta.corrida.nome}"></td>
-                            <td th:text="${pergunta.alternativas.size()}"></td>
-                            <td>
-                                <div class="table-actions">
-                                    <a href="#" th:href="@{/perguntas/{id}/editar(id=${pergunta.id})}" class="edit-btn">Editar</a>
-                                    <form method="post" th:action="@{/perguntas/{id}/excluir(id=${pergunta.id})}" style="display:inline;">
-                                        <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza?')">Excluir</button>
-                                    </form>
-                                </div>
+                    <tbody>
+                        <tr th:each="resultado : ${ultimosResultados}">
+                            <td th:text="${resultado.participante.nome}" style="color: #1a1a1a;">Admin</td>
+                            <td th:utext="${resultado.corrida.nome}" style="color: #1a1a1a;">Grande Premio XP</td>
+                            <td th:text="${resultado.pontuacao} + ' pts'" style="font-weight: bold; color: #0054e3;">0 pts</td>
+                            <td th:text="${#temporals.format(resultado.dataHora, 'dd/MM/yyyy HH:mm')}" style="color: #555;">01/01/2024 10:00</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(ultimosResultados)}">
+                            <td colspan="4" style="text-align: center; padding: 20px; color: #666;">
+                                Nenhum resultado registrado ainda.
                             </td>
                         </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="login-screen__bottom">
+            <div class="login-screen__login-info">
+                <span>XP Corridas © IFPB PWEB2 - Dashboard Admin</span>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

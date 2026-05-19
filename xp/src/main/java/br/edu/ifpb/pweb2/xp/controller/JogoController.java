@@ -1,19 +1,12 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
 import br.edu.ifpb.pweb2.xp.model.Pergunta;
-<<<<<<< HEAD
-import br.edu.ifpb.pweb2.xp.repository.ParticipanteRepository;
-import br.edu.ifpb.pweb2.xp.service.CorridaService;
-import br.edu.ifpb.pweb2.xp.service.PerguntaService;
-import br.edu.ifpb.pweb2.xp.service.ResultadoService;
-=======
 import br.edu.ifpb.pweb2.xp.model.Corrida;
 import br.edu.ifpb.pweb2.xp.model.Participante;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import br.edu.ifpb.pweb2.xp.service.ResultadoService;
 
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-<<<<<<< HEAD
-=======
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 import java.util.List;
 
 @Controller
@@ -49,12 +39,6 @@ public class JogoController {
     @Autowired
     private ResultadoService resultadoService;
 
-<<<<<<< HEAD
-    @Autowired
-    private ParticipanteRepository participanteRepository;
-
-=======
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
     @GetMapping
     public ModelAndView exibirPergunta(HttpSession session) {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
@@ -111,7 +95,7 @@ public class JogoController {
 
         Pergunta perguntaAtual = perguntas.get(indice);
         if (!perguntaAtual.getId().equals(perguntaId)) {
-            redirectAttributes.addFlashAttribute("erro", "Pergunta inválida para esta etapa da corrida.");
+            redirectAttributes.addFlashAttribute("erro", "Pergunta invalida para esta etapa da corrida.");
             return "redirect:/corridas/jogar";
         }
 
@@ -137,15 +121,9 @@ public class JogoController {
     @GetMapping("/fim")
     public ModelAndView fim(HttpSession session) {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
-<<<<<<< HEAD
-        Long participanteId = (Long) session.getAttribute("participanteId");
-        
-        if (corridaId == null || participanteId == null) {
-=======
         String nomeUsuario = (String) session.getAttribute("usuario");
 
         if (corridaId == null || nomeUsuario == null) {
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
             return new ModelAndView("redirect:/corridas");
         }
 
@@ -153,49 +131,20 @@ public class JogoController {
         int total = perguntas.size();
         int acertos = acertosAtuais(session);
 
-<<<<<<< HEAD
-        // Salvar resultado no banco de dados
-        try {
-            var participante = participanteRepository.findById(participanteId).orElse(null);
-            var corrida = corridaService.buscarPorId(corridaId);
-            
-            if (participante != null && corrida != null && total > 0) {
-                // Calcular pontuação: (acertos / total) * 100
-                BigDecimal pontuacao = BigDecimal.valueOf(acertos)
-                        .divide(BigDecimal.valueOf(total), 2, java.math.RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(100));
-                
-                resultadoService.salvar(participante, corrida, pontuacao);
-                
-                // Limpar dados da sessão após salvar
-                session.removeAttribute(SESSAO_CORRIDA_ID);
-                session.removeAttribute(SESSAO_PERGUNTA_INDICE);
-                session.removeAttribute(SESSAO_ACERTOS);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-=======
         Corrida corrida = corridaService.buscarPorId(corridaId);
 
-        // --- SALVAMENTO SEGURO VIA ATRIBUTOS DE SESSÃO ---
         try {
             BigDecimal pontuacaoBigDecimal = new BigDecimal(acertos);
 
-            // Instancia o objeto do Participante e injeta o nome vindo da sessão.
-            // O seu ResultadoService irá receber esta entidade de forma limpa.
             Participante participante = new Participante();
             participante.setNome(nomeUsuario);
             participante.setAdmin("admin".equalsIgnoreCase(nomeUsuario));
 
-            // Chama o método do service passando os parâmetros exatos esperados
             resultadoService.salvar(participante, corrida, pontuacaoBigDecimal);
 
         } catch (Exception e) {
             System.err.println("Erro ao persistir o resultado no ranking: " + e.getMessage());
         }
-        // -------------------------------------------------
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 
         ModelAndView model = new ModelAndView("corridas/jogar/fim");
         model.addObject("corrida", corrida);

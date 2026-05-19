@@ -72,6 +72,9 @@ public class PerguntaService {
                 .toList();
     }
 
+    public List<Pergunta> listarTodos() {
+        return repository.findAll();
+    }
     private void validarDados(String enunciado, List<String> alternativas, Integer respostaCorreta) {
         if (enunciado == null || enunciado.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Enunciado é obrigatório");

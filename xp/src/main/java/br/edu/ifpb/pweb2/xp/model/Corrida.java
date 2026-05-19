@@ -13,8 +13,7 @@ public class Corrida {
 
     private String nome;
 
-    private String descricao;
-
-    private Integer tempoLimitadoSegundos;
+    @Column(name = "tempo_limite_segundos")
+    private Integer tempoLimiteSegundos;
 
 }

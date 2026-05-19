@@ -39,7 +39,7 @@
         /* Container da Tabela (Maior e Centralizado) */
         .lobby-content {
             width: 85%;
-            max-width: 1000px; /* Aumentado ligeiramente para os botões do XP caberem folgados */
+            max-width: 1000px;
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 8px;
@@ -73,12 +73,24 @@
             background-color: #f0f7ff;
         }
 
-        /* Alinhamento da barra de ações do topo */
+        /* Barra de ações superior - reorganizada */
         .admin-actions {
             display: flex;
-            justify-content: flex-end;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .admin-actions-left {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-actions-right {
+            display: flex;
+            gap: 10px;
         }
 
         .lobby-mensagem {
@@ -93,7 +105,7 @@
 
         .acoes-corrida {
             display: flex;
-            flex-wrap: nowrap; /* Impede os botões de quebrarem linha */
+            flex-wrap: nowrap;
             gap: 6px;
             justify-content: center;
             align-items: center;
@@ -201,28 +213,27 @@
 
                 <p th:if="${mensagem != null}" class="lobby-mensagem" th:text="${mensagem}"></p>
 
+                <!-- Barra de ações reorganizada: à esquerda Ranking/Dashboard, à direita Nova Corrida -->
                 <div class="admin-actions">
-<<<<<<< HEAD
-                    <a th:if="${session.usuarioAdmin == true}" 
-                       href="/admin/dashboard" 
-                       class="login-screen__submit" 
-                       style="text-decoration: none; padding: 8px 20px; margin-right: 10px;">
-                        🔧 Dashboard
-                    </a>
-                    <a th:if="${session.usuarioAdmin == true}" 
-                       href="/corridas/novo" 
-                       class="login-screen__submit" 
-                       style="text-decoration: none; padding: 8px 20px;">
-=======
-                    <a th:href="@{/ranking}" class="btn-xp-clss" style="padding: 6px 16px; font-weight: bold;">
-                        Ver Ranking Geral
-                    </a>
-
-                    <a th:if="${session.usuarioAdmin == true}" href="/corridas/novo" class="btn-xp-clss btn-xp-clss--iniciar"
-                        style="padding: 6px 16px;">
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
-                        + Nova Corrida
-                    </a>
+                    <div class="admin-actions-left">
+                        <a th:href="@{/ranking}" class="btn-xp-clss" style="padding: 6px 16px; font-weight: bold;">
+                            Ver Ranking Geral
+                        </a>
+                        <a th:if="${session.usuarioAdmin == true}" 
+                           th:href="@{/admin/dashboard}" 
+                           class="btn-xp-clss" 
+                           style="padding: 6px 16px; font-weight: bold; background: linear-gradient(to bottom, #0058e3, #00489a); color: white !important;">
+                            Dashboard Admin
+                        </a>
+                    </div>
+                    <div class="admin-actions-right">
+                        <a th:if="${session.usuarioAdmin == true}" 
+                           href="/corridas/novo" 
+                           class="btn-xp-clss btn-xp-clss--iniciar"
+                           style="padding: 6px 16px;">
+                            + Nova Corrida
+                        </a>
+                    </div>
                 </div>
 
                 <table class="xp-table">
@@ -236,7 +247,7 @@
                     <tbody>
                         <tr th:each="corrida : ${corridas}">
                             <td th:text="${corrida.id}" style="font-weight: bold; width: 50px;">1</td>
-                            <td th:text="${corrida.nome}">Grande Prêmio XP</td>
+                            <td th:utext="${corrida.nome}">Grande Premio XP</td>
                             <td style="text-align: center; width: 420px;">
                                 <div class="acoes-corrida">
                                     
@@ -261,18 +272,19 @@
                                         <button type="submit" class="btn-xp-clss btn-xp-clss--excluir">Excluir</button>
                                     </form>
                                 </div>
-                            </td>
-                        </tr>
+                             </td>
+                         </tr>
                         <tr th:if="${#lists.isEmpty(corridas)}">
                             <td colspan="3" style="text-align: center; padding: 40px; color: #666;">
                                 Nenhuma corrida disponível no momento.
-                            </td>
-                        </tr>
+                             </td>
+                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Botão Sair mantido no canto inferior direito como original -->
         <div class="logout-container">
             <a th:href="@{/auth/logout}" class="logout-button">
                 Sair

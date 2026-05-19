@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <title>XP Corridas - Pergunta</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
@@ -17,72 +16,10 @@
             height: 100%;
         }
 
-<<<<<<< HEAD
-        .jogo-header h1 { margin: 0 0 8px; font-size: 2.2em; }
-
-        .jogo-content {
-            width: 90%;
-            max-width: 720px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 32px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #00489a;
-            color: #333;
-            font-family: Tahoma, sans-serif;
-        }
-
-        .jogo-progresso {
-            font-size: 0.95em;
-            color: #555;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tempo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .tempo-display {
-            font-weight: bold;
-            color: #00489a;
-            font-size: 1.1em;
-            min-width: 50px;
-        }
-
-        .tempo-barra {
-            width: 200px;
-            height: 6px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .tempo-barra-preenchida {
-            height: 100%;
-            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
-            width: 100%;
-            transition: width 0.1s linear;
-        }
-
-        .jogo-enunciado {
-            font-size: 1.25em;
-            font-weight: bold;
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-
-        .alternativa {
-=======
         /* Fundo Azul Windows XP */
         .xp-background {
             width: 100%;
             height: 100vh;
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,7 +38,6 @@
             width: 90%;
         }
 
-        /* Barra de título - igual à caixa de diálogo do XP */
         .xp-titlebar {
             height: 38px;
             background: linear-gradient(to right, #0054e3, #3c8aed);
@@ -377,71 +313,9 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
-
-        .tempo-alerta {
-            animation: pulse 0.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { color: #f44336; }
-            50% { color: #c62828; }
-        }
     </style>
 </head>
 <body>
-<<<<<<< HEAD
-<div class="login-screen">
-    <div class="login-screen__top"></div>
-
-    <div class="login-screen__center">
-
-        <div class="jogo-header">
-            <h1 th:text="'🏎️ ' + ${corrida.nome}">Corrida</h1>
-            <p th:if="${session.usuario != null}" th:text="'Jogador: ' + ${session.usuario}">Jogador</p>
-        </div>
-
-        <div class="jogo-content">
-
-            <div class="jogo-progresso">
-                <span th:text="'Pergunta ' + ${numero} + ' de ' + ${total}">Pergunta 1 de 3</span>
-                <div class="tempo-container" th:if="${corrida.tempoLimitadoSegundos != null and corrida.tempoLimitadoSegundos > 0}">
-                    <span class="tempo-display" id="tempoDisplay">--</span>
-                    <div class="tempo-barra">
-                        <div class="tempo-barra-preenchida" id="tempoBarraPreenchida"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div th:if="${feedbackMensagem != null}"
-                 class="feedback"
-                 th:classappend="${feedbackCorreto} ? ' feedback--ok' : ' feedback--erro'"
-                 th:text="${feedbackMensagem}">
-                Feedback
-            </div>
-
-            <p th:if="${erro != null}" class="feedback feedback--erro" th:text="${erro}"></p>
-
-            <p class="jogo-enunciado" th:text="${pergunta.enunciado}">
-                Enunciado da pergunta
-            </p>
-
-            <form th:action="@{/corridas/jogar/responder}" method="post" id="formResposta">
-                <input type="hidden" name="perguntaId" th:value="${pergunta.id}">
-
-                <label class="alternativa"
-                       th:each="alt, stat : ${pergunta.alternativas}"
-                       th:for="${'resposta-' + stat.index}">
-                    <input type="radio"
-                           name="resposta"
-                           th:id="${'resposta-' + stat.index}"
-                           th:value="${stat.index}"
-                           required>
-                    <span th:text="${alt}">Alternativa</span>
-                </label>
-
-                <div class="jogo-actions">
-                    <button type="submit" class="login-screen__submit" id="btnSubmit">Confirmar resposta</button>
-=======
     <div class="xp-background">
         <div class="xp-window">
             <!-- Barra de título com X vermelho -->
@@ -457,13 +331,14 @@
                 </div>
             </div>
 
+            <!-- Conteúdo -->
             <div class="xp-content">
                 <div class="xp-message">
                     <h3 th:text="'🏁 ' + ${corrida.nome}">Corrida XP</h3>
                     <p>Piloto: <strong th:text="${session.usuario != null ? session.usuario : 'Convidado'}">Usuário</strong></p>
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
                 </div>
 
+                <!-- Timer e Barra de Progresso -->
                 <div th:if="${session.tempoLimiteSegundos != null}">
                     <div class="progress-container">
                         <div class="progress-frame">
@@ -481,7 +356,7 @@
 
                 <!-- Informações da pergunta -->
                 <div class="xp-message" style="margin-top: 8px;">
-                    <p style="font-size: 12px; color: #777;"> Pergunta <span th:text="${numero}">1</span> de <span th:text="${total}">1</span></p>
+                    <p style="font-size: 12px; color: #777;">📋 Pergunta <span th:text="${numero}">1</span> de <span th:text="${total}">1</span></p>
                 </div>
 
                 <!-- Feedback -->
@@ -520,38 +395,6 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-</div>
-
-<script th:if="${corrida.tempoLimitadoSegundos != null and corrida.tempoLimitadoSegundos > 0}">
-    let tempoTotal = [[${corrida.tempoLimitadoSegundos}]];
-    let tempoRestante = tempoTotal;
-    let tempoInicio = Date.now();
-
-    function atualizarTempo() {
-        let tempoDecorrido = Math.floor((Date.now() - tempoInicio) / 1000);
-        tempoRestante = tempoTotal - tempoDecorrido;
-
-        if (tempoRestante <= 0) {
-            tempoRestante = 0;
-            clearInterval(intervalo);
-            document.getElementById('formResposta').submit();
-            return;
-        }
-
-        let percentual = (tempoRestante / tempoTotal) * 100;
-        document.getElementById('tempoDisplay').textContent = tempoRestante + 's';
-        document.getElementById('tempoBarraPreenchida').style.width = percentual + '%';
-
-        if (tempoRestante <= 10) {
-            document.getElementById('tempoDisplay').classList.add('tempo-alerta');
-        }
-    }
-
-    let intervalo = setInterval(atualizarTempo, 100);
-    atualizarTempo();
-</script>
-=======
 
     <!-- Script do timer com barra de 0% a 100% -->
     <script th:if="${session.tempoLimiteSegundos != null}">
@@ -667,6 +510,5 @@
             }
         })();
     </script>
->>>>>>> 2c5f8c3e5518d7ec191b7abaa2c7a70b26049878
 </body>
 </html>

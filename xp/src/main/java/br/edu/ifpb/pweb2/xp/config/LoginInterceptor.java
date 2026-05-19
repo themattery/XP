@@ -17,16 +17,13 @@ public class LoginInterceptor implements HandlerInterceptor {
             Object handler) throws Exception {
 
         HttpSession session = request.getSession();
-
         Object usuario = session.getAttribute("usuario");
 
         if (usuario == null) {
-
             response.sendRedirect("/auth");
-
             return false;
         }
 
         return true;
     }
-} 
+}
