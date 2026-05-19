@@ -4,13 +4,16 @@
 -- =============================================================================
 
 -- Corridas -------------------------------------------------------------------
-INSERT INTO corrida (nome)
-SELECT 'Grande Prêmio XP'
+INSERT INTO corrida (nome, tempo_limite_segundos)
+SELECT 'Grande Prêmio XP', 60
 WHERE NOT EXISTS (SELECT 1 FROM corrida WHERE nome = 'Grande Prêmio XP');
 
-INSERT INTO corrida (nome)
-SELECT 'Sprint IFPB'
+INSERT INTO corrida (nome, tempo_limite_segundos)
+SELECT 'Sprint IFPB', 60
 WHERE NOT EXISTS (SELECT 1 FROM corrida WHERE nome = 'Sprint IFPB');
+
+UPDATE corrida SET tempo_limite_segundos = 60 WHERE nome = 'Grande Prêmio XP';
+UPDATE corrida SET tempo_limite_segundos = 60 WHERE nome = 'Sprint IFPB';
 
 -- Participantes --------------------------------------------------------------
 INSERT INTO participante (nome, admin)

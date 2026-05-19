@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Controller
@@ -34,6 +36,10 @@ public class JogoController {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
         if (corridaId == null) {
             return new ModelAndView("redirect:/corridas");
+        }
+
+        if (tempoExpirado(session)) {
+            return new ModelAndView("redirect:/corridas/jogar/fim");
         }
 
         List<Pergunta> perguntas = perguntaService.listarPorCorrida(corridaId);
@@ -66,6 +72,10 @@ public class JogoController {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
         if (corridaId == null) {
             return "redirect:/corridas";
+        }
+
+        if (tempoExpirado(session)) {
+            return "redirect:/corridas/jogar/fim";
         }
 
         List<Pergunta> perguntas = perguntaService.listarPorCorrida(corridaId);
@@ -137,6 +147,18 @@ public class JogoController {
             return "Resposta incorreta. A alternativa certa era: " + alternativas.get(indiceCorreto);
         }
         return "Resposta incorreta.";
+    }
+
+    private boolean tempoExpirado(HttpSession session) {
+        Integer tempoLimiteSegundos = (Integer) session.getAttribute("tempoLimiteSegundos");
+        LocalDateTime tempoInicio = (LocalDateTime) session.getAttribute("tempoInicioCorrida");
+
+        if (tempoLimiteSegundos == null || tempoInicio == null) {
+            return false;
+        }
+
+        long segundosDecorridos = ChronoUnit.SECONDS.between(tempoInicio, LocalDateTime.now());
+        return segundosDecorridos >= tempoLimiteSegundos;
     }
 
 }

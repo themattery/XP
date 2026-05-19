@@ -95,6 +95,29 @@
             display: flex;
             justify-content: flex-end;
         }
+
+        .timer-container {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            border: 2px solid #00489a;
+        }
+
+        .timer-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00489a;
+        }
+
+        .timer-display.warning {
+            color: #ff9800;
+        }
+
+        .timer-display.danger {
+            color: #f44336;
+        }
     </style>
 </head>
 <body>
@@ -109,6 +132,11 @@
         </div>
 
         <div class="jogo-content">
+
+            <div th:if="${session.tempoLimiteSegundos != null}" class="timer-container">
+                <p>Tempo restante:</p>
+                <div id="timer" class="timer-display" th:data-tempo-limite="${session.tempoLimiteSegundos}">00:00</div>
+            </div>
 
             <p class="jogo-progresso"
                th:text="'Pergunta ' + ${numero} + ' de ' + ${total}">
@@ -157,5 +185,40 @@
         </div>
     </div>
 </div>
+
+<script th:if="${session.tempoLimiteSegundos != null}">
+    (function() {
+        const timerElement = document.getElementById('timer');
+        const tempoLimiteSegundos = parseInt(timerElement.getAttribute('data-tempo-limite'));
+        let tempoRestante = tempoLimiteSegundos;
+
+        function formatarTempo(segundos) {
+            const minutos = Math.floor(segundos / 60);
+            const seg = segundos % 60;
+            return String(minutos).padStart(2, '0') + ':' + String(seg).padStart(2, '0');
+        }
+
+        function atualizarTimer() {
+            timerElement.textContent = formatarTempo(tempoRestante);
+
+            if (tempoRestante <= 10) {
+                timerElement.classList.add('danger');
+            } else if (tempoRestante <= 30) {
+                timerElement.classList.add('warning');
+            }
+
+            if (tempoRestante <= 0) {
+                window.location.href = '/corridas/jogar/fim';
+                return;
+            }
+
+            tempoRestante--;
+        }
+
+        atualizarTimer();
+        setInterval(atualizarTimer, 1000);
+    })();
+</script>
+
 </body>
 </html>

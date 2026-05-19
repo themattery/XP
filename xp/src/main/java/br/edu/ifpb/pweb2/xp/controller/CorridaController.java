@@ -84,12 +84,13 @@ public class CorridaController {
 
     @PostMapping("/{id}/iniciar")
     public String iniciar(@PathVariable Long id, HttpSession session) {
-        service.buscarPorId(id);
+        Corrida corrida = service.buscarPorId(id);
 
         session.setAttribute("corridaId", id);
         session.setAttribute("tempoInicioCorrida", LocalDateTime.now());
         session.setAttribute("perguntaIndice", 0);
         session.setAttribute("acertos", 0);
+        session.setAttribute("tempoLimiteSegundos", corrida.getTempoLimiteSegundos());
 
         return "redirect:/corridas/jogar";
     }
