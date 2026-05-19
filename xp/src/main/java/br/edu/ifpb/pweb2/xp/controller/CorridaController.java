@@ -94,6 +94,13 @@ public class CorridaController {
         return "redirect:/corridas/jogar";
     }
 
+    @GetMapping("/{id}")
+    public ModelAndView detalhe(@PathVariable Long id, ModelAndView model) {
+        model.setViewName("corridas/detalhe");
+        model.addObject("corrida", service.buscarPorId(id));
+        return model;
+    }
+
     private String exigirAdmin(HttpSession session) {
         if (!Boolean.TRUE.equals(session.getAttribute(SESSAO_ADMIN))) {
             return "redirect:/corridas";

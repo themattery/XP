@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Corrida</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="login-screen">
+    <div class="login-screen__top"></div>
+
+    <div class="login-screen__center">
+        <div class="jogo-header">
+            <h1 th:text="${corrida.nome}">Nome da Corrida</h1>
+            <p th:text="${corrida.descricao}">Descrição</p>
+        </div>
+
+        <div class="jogo-content" style="max-width:700px;">
+            <p><strong>Tempo limitado:</strong> <span th:text="${corrida.tempoLimitadoSegundos != null ? corrida.tempoLimitadoSegundos + ' segundos' : 'Sem limite'}">--</span></p>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <form th:action="@{/corridas/{id}/iniciar(id=${corrida.id})}" method="post">
+                    <button type="submit" class="login-screen__submit">Iniciar Corrida</button>
+                </form>
+
+                <a th:href="@{/corridas}" class="login-screen__submit" style="text-decoration:none; display:inline-block; padding:10px 16px;">Voltar ao Lobby</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-screen__bottom">
+        <div class="login-screen__login-info">
+            <span>XP Corridas © IFPB PWEB2</span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

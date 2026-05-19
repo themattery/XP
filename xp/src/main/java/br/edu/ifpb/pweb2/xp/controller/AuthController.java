@@ -40,5 +40,13 @@ public class AuthController {
         return "redirect:/corridas";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/auth";
+    }
+
 }
 
