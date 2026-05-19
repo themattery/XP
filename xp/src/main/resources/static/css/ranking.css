@@ -1,0 +1,141 @@
+/* Fundo clássico Azul do Desktop do Windows XP */
+body {
+    background-color: #5A7EDC; 
+    font-family: "Tahoma", "Segoe UI", sans-serif;
+    font-size: 12px;
+    margin: 20px;
+    padding: 0;
+}
+
+/* Estrutura da Janela Luna Blue */
+.xp-window {
+    background-color: #ECE9D8;
+    border: 3px solid #0052E6;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 900px;
+    margin: 30px auto;
+    overflow: hidden;
+}
+
+/* Barra de Título em Degradê */
+.xp-titlebar {
+    background: linear-gradient(to bottom, #0058F8 0%, #0046D5 10%, #0058F8 40%, #003099 100%);
+    color: white;
+    padding: 6px 10px;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 1px 1px #001250;
+}
+
+/* Botões de controle da janela */
+.xp-min-max-close {
+    display: flex;
+    gap: 2px;
+}
+
+.xp-sys-btn {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(to bottom, #0058F8 0%, #003099 100%);
+    border: 1px solid #FFFFFF;
+    color: white;
+    text-align: center;
+    line-height: 12px;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 1px rgba(0,0,0,0.5);
+}
+
+.xp-sys-btn.close {
+    background: linear-gradient(to bottom, #E2481A 0%, #A61F00 100%);
+    border-color: #FF7D59;
+}
+
+/* Barra de Opções Superior */
+.xp-menu-bar {
+    background-color: #ECE9D8;
+    border-bottom: 1px solid #ACA899;
+    padding: 6px 10px;
+    display: flex;
+    gap: 15px;
+    font-size: 11px;
+    align-items: center;
+}
+
+/* Área interna branca (Molde recortado) */
+.xp-body {
+    background-color: #FFFFFF;
+    margin: 6px;
+    padding: 20px;
+    border: 2px inset #FFFFFF;
+    min-height: 300px;
+}
+
+.xp-header-title {
+    margin-top: 0;
+    color: #0046D5;
+    border-bottom: 2px dashed #0052E6;
+    padding-bottom: 6px;
+}
+
+/* Tabela Estilo Modo Detalhes do Windows Explorer */
+.xp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.xp-table th {
+    background: linear-gradient(to bottom, #F9F8F4 0%, #ECE9D8 100%);
+    border: 1px solid #ACA899;
+    padding: 6px 10px;
+    text-align: left;
+    font-weight: normal;
+    color: #444444;
+    box-shadow: inset 0 1px 0 #FFFFFF;
+}
+
+.xp-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #E2E2DB;
+    color: #000000;
+}
+
+.xp-table tr:nth-child(even) {
+    background-color: #F7F7F3;
+}
+
+/* Seleção Azul Clássica ao Passar o Mouse */
+.xp-table tr:hover {
+    background-color: #316AC5 !important;
+    color: #FFFFFF !important;
+}
+
+.xp-table tr:hover td {
+    color: #FFFFFF !important;
+}
+
+/* Botão Tridimensional do XP */
+.xp-button {
+    background: linear-gradient(to bottom, #FFFFFF 0%, #ECE9D8 100%);
+    border: 1px solid #707070;
+    border-radius: 3px;
+    padding: 4px 14px;
+    color: #000000;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: inset -1px -1px 2px #999999;
+    font-family: "Tahoma", sans-serif;
+    cursor: pointer;
+}
+
+.xp-button:active {
+    background: #E5E5E5;
+    box-shadow: inset 1px 1px 2px #666666;
+}

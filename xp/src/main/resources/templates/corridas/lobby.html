@@ -18,9 +18,7 @@
         .login-screen__center {
             flex-direction: column;
             justify-content: center;
-            /* Centraliza verticalmente */
             align-items: center;
-            /* Centraliza horizontalmente */
             padding: 20px;
         }
 
@@ -41,9 +39,8 @@
         /* Container da Tabela (Maior e Centralizado) */
         .lobby-content {
             width: 85%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.9);
-            /* Fundo claro para contraste */
+            max-width: 1000px; /* Aumentado ligeiramente para os botões do XP caberem folgados */
+            background: rgba(255, 255, 255, 0.95);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -67,7 +64,7 @@
         }
 
         .xp-table tbody td {
-            padding: 15px;
+            padding: 12px 15px;
             border: 1px solid #ccc;
             background: white;
         }
@@ -76,10 +73,11 @@
             background-color: #f0f7ff;
         }
 
-        /* Alinhamento do botão de Admin */
+        /* Alinhamento da barra de ações do topo */
         .admin-actions {
             display: flex;
             justify-content: flex-end;
+            gap: 12px;
             margin-bottom: 15px;
         }
 
@@ -95,8 +93,8 @@
 
         .acoes-corrida {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
+            flex-wrap: nowrap; /* Impede os botões de quebrarem linha */
+            gap: 6px;
             justify-content: center;
             align-items: center;
         }
@@ -105,25 +103,55 @@
             margin: 0;
         }
 
-        .btn-admin {
+        /* Botão Tridimensional clássico do Windows XP (Estilo Luna) */
+        .btn-xp-clss {
+            display: inline-block;
             text-decoration: none;
-            padding: 6px 12px;
-            font-size: 0.85em;
-            border: none;
-            cursor: pointer;
             font-family: Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000 !important;
+            background: linear-gradient(to bottom, #ffffff 0%, #f0f0ea 70%, #e2e2d4 100%);
+            border: 1px solid #707070;
+            border-radius: 3px;
+            padding: 4px 12px;
+            cursor: pointer;
+            box-shadow: inset -1px -1px 1px #999999, 1px 1px 2px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        .btn-admin--editar {
-            background: #f0f7ff;
-            color: #00489a;
-            border: 1px solid #00489a;
+        .btn-xp-clss:hover {
+            background: linear-gradient(to bottom, #fff8dd 0%, #ffeeb5 70%, #ffdd75 100%);
+            border-color: #ffb515;
         }
 
-        .btn-admin--excluir {
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #e53935;
+        .btn-xp-clss:active {
+            background: #e5e5e5;
+            box-shadow: inset 1px 1px 2px #666666;
+        }
+
+        /* Variação Verde para o Botão Iniciar/Novo */
+        .btn-xp-clss--iniciar {
+            background: linear-gradient(to bottom, #9cd867 0%, #70b33b 70%, #559624 100%);
+            border-color: #3b6e16;
+            color: #ffffff !important;
+            font-weight: bold;
+            box-shadow: inset -1px -1px 1px #3b6e16;
+        }
+        .btn-xp-clss--iniciar:hover {
+            background: linear-gradient(to bottom, #b3e685 0%, #8cd154 70%, #6da838 100%);
+            border-color: #4a8520;
+        }
+
+        /* Variação Vermelha para o Botão Excluir */
+        .btn-xp-clss--excluir {
+            background: linear-gradient(to bottom, #fca3a3 0%, #f36c6c 70%, #ce2d2d 100%);
+            border-color: #961313;
+            color: #ffffff !important;
+            box-shadow: inset -1px -1px 1px #961313;
+        }
+        .btn-xp-clss--excluir:hover {
+            background: linear-gradient(to bottom, #ffbebe 0%, #ff8787 70%, #e54444 100%);
+            border-color: #b21e1e;
         }
 
         /* Botão logout */
@@ -138,33 +166,22 @@
             display: flex;
             align-items: center;
             gap: 8px;
-
             background: linear-gradient(to bottom, #ff4d4d 0%, #cc0000 100%);
             color: white;
-
             padding: 12px 22px;
-
             border-radius: 8px;
             border: 1px solid #7a0000;
-
             text-decoration: none;
-
             font-family: Tahoma, sans-serif;
             font-size: 1.1em;
             font-weight: bold;
-
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-
             transition: all 0.2s ease;
         }
 
         .logout-button:hover {
             background: linear-gradient(to bottom, #ff6666 0%, #990000 100%);
             transform: scale(1.05);
-        }
-
-        .logout-button:active {
-            transform: scale(0.97);
         }
     </style>
 </head>
@@ -176,7 +193,7 @@
         <div class="login-screen__center">
 
             <div class="lobby-header">
-                <h1>🏁 Lobby de Corridas</h1>
+                <h1>Lobby de Corridas</h1>
                 <p style="font-size: 1.2em;">Escolha uma corrida ativa para participar</p>
             </div>
 
@@ -185,8 +202,12 @@
                 <p th:if="${mensagem != null}" class="lobby-mensagem" th:text="${mensagem}"></p>
 
                 <div class="admin-actions">
-                    <a th:if="${session.usuarioAdmin == true}" href="/corridas/novo" class="login-screen__submit"
-                        style="text-decoration: none; padding: 8px 20px;">
+                    <a th:href="@{/ranking}" class="btn-xp-clss" style="padding: 6px 16px; font-weight: bold;">
+                        Ver Ranking Geral
+                    </a>
+
+                    <a th:if="${session.usuarioAdmin == true}" href="/corridas/novo" class="btn-xp-clss btn-xp-clss--iniciar"
+                        style="padding: 6px 16px;">
                         + Nova Corrida
                     </a>
                 </div>
@@ -203,21 +224,28 @@
                         <tr th:each="corrida : ${corridas}">
                             <td th:text="${corrida.id}" style="font-weight: bold; width: 50px;">1</td>
                             <td th:text="${corrida.nome}">Grande Prêmio XP</td>
-                            <td style="text-align: center; min-width: 320px;">
+                            <td style="text-align: center; width: 420px;">
                                 <div class="acoes-corrida">
+                                    
                                     <form th:action="@{/corridas/{id}/iniciar(id=${corrida.id})}" method="post">
-                                        <button type="submit" class="login-screen__submit btn-admin">Iniciar</button>
+                                        <button type="submit" class="btn-xp-clss btn-xp-clss--iniciar">Iniciar</button>
                                     </form>
+
+                                    <a th:href="@{/ranking/corrida/{id}(id=${corrida.id})}" 
+                                       class="btn-xp-clss">Histórico</a>
+
                                     <a th:if="${session.usuarioAdmin == true}"
                                         th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}"
-                                        class="btn-admin btn-admin--editar">Perguntas</a>
+                                        class="btn-xp-clss">Perguntas</a>
+                                    
                                     <a th:if="${session.usuarioAdmin == true}"
                                         th:href="@{/corridas/{id}/editar(id=${corrida.id})}"
-                                        class="btn-admin btn-admin--editar">Editar</a>
+                                        class="btn-xp-clss">Editar</a>
+                                    
                                     <form th:if="${session.usuarioAdmin == true}"
                                         th:action="@{/corridas/{id}/excluir(id=${corrida.id})}" method="post"
                                         onsubmit="return confirm('Excluir esta corrida e todas as perguntas vinculadas?');">
-                                        <button type="submit" class="btn-admin btn-admin--excluir">Excluir</button>
+                                        <button type="submit" class="btn-xp-clss btn-xp-clss--excluir">Excluir</button>
                                     </form>
                                 </div>
                             </td>
@@ -234,10 +262,9 @@
 
         <div class="logout-container">
             <a th:href="@{/auth/logout}" class="logout-button">
-                ⎋ Sair
+                Sair
             </a>
         </div>
-
 
         <div class="login-screen__bottom">
             <div class="login-screen__login-info">
@@ -245,7 +272,5 @@
             </div>
         </div>
     </div>
-
 </body>
-
 </html>
