@@ -40,6 +40,37 @@
             font-size: 0.95em;
             color: #555;
             margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tempo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tempo-display {
+            font-weight: bold;
+            color: #00489a;
+            font-size: 1.1em;
+            min-width: 50px;
+        }
+
+        .tempo-barra {
+            width: 200px;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .tempo-barra-preenchida {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #ffc107, #f44336);
+            width: 100%;
+            transition: width 0.1s linear;
         }
 
         .jogo-enunciado {
@@ -95,6 +126,15 @@
             display: flex;
             justify-content: flex-end;
         }
+
+        .tempo-alerta {
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { color: #f44336; }
+            50% { color: #c62828; }
+        }
     </style>
 </head>
 <body>
@@ -110,10 +150,15 @@
 
         <div class="jogo-content">
 
-            <p class="jogo-progresso"
-               th:text="'Pergunta ' + ${numero} + ' de ' + ${total}">
-                Pergunta 1 de 3
-            </p>
+            <div class="jogo-progresso">
+                <span th:text="'Pergunta ' + ${numero} + ' de ' + ${total}">Pergunta 1 de 3</span>
+                <div class="tempo-container" th:if="${corrida.tempoLimitadoSegundos != null and corrida.tempoLimitadoSegundos > 0}">
+                    <span class="tempo-display" id="tempoDisplay">--</span>
+                    <div class="tempo-barra">
+                        <div class="tempo-barra-preenchida" id="tempoBarraPreenchida"></div>
+                    </div>
+                </div>
+            </div>
 
             <div th:if="${feedbackMensagem != null}"
                  class="feedback"
@@ -128,7 +173,7 @@
                 Enunciado da pergunta
             </p>
 
-            <form th:action="@{/corridas/jogar/responder}" method="post">
+            <form th:action="@{/corridas/jogar/responder}" method="post" id="formResposta">
                 <input type="hidden" name="perguntaId" th:value="${pergunta.id}">
 
                 <label class="alternativa"
@@ -143,7 +188,7 @@
                 </label>
 
                 <div class="jogo-actions">
-                    <button type="submit" class="login-screen__submit">Confirmar resposta</button>
+                    <button type="submit" class="login-screen__submit" id="btnSubmit">Confirmar resposta</button>
                 </div>
             </form>
 
@@ -157,5 +202,34 @@
         </div>
     </div>
 </div>
+
+<script th:if="${corrida.tempoLimitadoSegundos != null and corrida.tempoLimitadoSegundos > 0}">
+    let tempoTotal = [[${corrida.tempoLimitadoSegundos}]];
+    let tempoRestante = tempoTotal;
+    let tempoInicio = Date.now();
+
+    function atualizarTempo() {
+        let tempoDecorrido = Math.floor((Date.now() - tempoInicio) / 1000);
+        tempoRestante = tempoTotal - tempoDecorrido;
+
+        if (tempoRestante <= 0) {
+            tempoRestante = 0;
+            clearInterval(intervalo);
+            document.getElementById('formResposta').submit();
+            return;
+        }
+
+        let percentual = (tempoRestante / tempoTotal) * 100;
+        document.getElementById('tempoDisplay').textContent = tempoRestante + 's';
+        document.getElementById('tempoBarraPreenchida').style.width = percentual + '%';
+
+        if (tempoRestante <= 10) {
+            document.getElementById('tempoDisplay').classList.add('tempo-alerta');
+        }
+    }
+
+    let intervalo = setInterval(atualizarTempo, 100);
+    atualizarTempo();
+</script>
 </body>
 </html>

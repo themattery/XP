@@ -26,6 +26,10 @@ public class PerguntaService {
         return repository.findByCorridaIdOrderByIdAsc(corridaId);
     }
 
+    public List<Pergunta> listarTodas() {
+        return repository.findAll();
+    }
+
     public Pergunta buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pergunta não encontrada"));

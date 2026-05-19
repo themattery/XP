@@ -135,6 +135,12 @@
 
                 <div class="admin-actions">
                     <a th:if="${session.usuarioAdmin == true}" 
+                       href="/admin/dashboard" 
+                       class="login-screen__submit" 
+                       style="text-decoration: none; padding: 8px 20px; margin-right: 10px;">
+                        🔧 Dashboard
+                    </a>
+                    <a th:if="${session.usuarioAdmin == true}" 
                        href="/corridas/novo" 
                        class="login-screen__submit" 
                        style="text-decoration: none; padding: 8px 20px;">

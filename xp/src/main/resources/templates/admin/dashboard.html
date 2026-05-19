@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+        .admin-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-header {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-header h1 { font-size: 1.8em; }
+        .admin-header .user-info { font-size: 0.95em; }
+        .admin-header a { color: #fff; text-decoration: none; margin-left: 20px; }
+
+        .admin-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .admin-sidebar {
+            width: 200px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-sidebar a {
+            display: block;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .admin-sidebar a:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .admin-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .admin-section {
+            margin-bottom: 40px;
+        }
+
+        .admin-section h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .section-actions {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            background: #00489a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #003366;
+        }
+
+        .btn--secondary {
+            background: #6c757d;
+        }
+
+        .btn--secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn--danger {
+            background: #e53935;
+        }
+
+        .btn--danger:hover {
+            background: #c62828;
+        }
+
+        .table-responsive {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            overflow: auto;
+            max-height: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        table th {
+            background: #00489a;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .table-actions a, .table-actions form {
+            display: inline;
+        }
+
+        .table-actions button {
+            padding: 6px 12px;
+            font-size: 0.85em;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #0069d9;
+        }
+
+        .edit-btn:hover {
+            background: #0056b3;
+        }
+
+        .delete-btn {
+            background: #e53935;
+        }
+
+        .delete-btn:hover {
+            background: #c62828;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <div class="admin-header">
+        <h1>🔧 Painel de Administração</h1>
+        <div class="user-info">
+            <span th:text="'Conectado como: ' + ${usuarioLogado}"></span>
+            <a href="/auth">Logout</a>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <div class="admin-sidebar">
+            <a href="/admin/dashboard">📊 Dashboard</a>
+            <a href="/corridas">🏎️ Lobby</a>
+            <a href="/ranking">🏆 Ranking</a>
+        </div>
+
+        <div class="admin-main">
+            <!-- Seção de Corridas -->
+            <div class="admin-section">
+                <h2>🏎️ Corridas</h2>
+                <div class="section-actions">
+                    <a href="/corridas/novo" class="btn">+ Nova Corrida</a>
+                </div>
+
+                <div th:if="${corridas.isEmpty()}" class="empty-state">
+                    <p>Nenhuma corrida cadastrada</p>
+                </div>
+
+                <div th:unless="${corridas.isEmpty()}" class="table-responsive">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="corrida : ${corridas}">
+                            <td th:text="${corrida.id}"></td>
+                            <td th:text="${corrida.nome}"></td>
+                            <td th:text="${corrida.descricao}"></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" th:href="@{/corridas/{id}/editar(id=${corrida.id})}" class="edit-btn">Editar</a>
+                                    <form method="post" th:action="@{/corridas/{id}/excluir(id=${corrida.id})}" style="display:inline;">
+                                        <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza?')">Excluir</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Seção de Perguntas -->
+            <div class="admin-section">
+                <h2>❓ Perguntas</h2>
+                <div class="section-actions">
+                    <a href="/corridas" class="btn">+ Nova Pergunta</a>
+                </div>
+
+                <div th:if="${perguntas.isEmpty()}" class="empty-state">
+                    <p>Nenhuma pergunta cadastrada</p>
+                </div>
+
+                <div th:unless="${perguntas.isEmpty()}" class="table-responsive">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Enunciado</th>
+                            <th>Corrida</th>
+                            <th>Alternativas</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pergunta : ${perguntas}">
+                            <td th:text="${pergunta.id}"></td>
+                            <td th:text="${pergunta.enunciado}"></td>
+                            <td th:text="${pergunta.corrida.nome}"></td>
+                            <td th:text="${pergunta.alternativas.size()}"></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a href="#" th:href="@{/perguntas/{id}/editar(id=${pergunta.id})}" class="edit-btn">Editar</a>
+                                    <form method="post" th:action="@{/perguntas/{id}/excluir(id=${pergunta.id})}" style="display:inline;">
+                                        <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza?')">Excluir</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

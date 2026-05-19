@@ -1,8 +1,10 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
 import br.edu.ifpb.pweb2.xp.model.Pergunta;
+import br.edu.ifpb.pweb2.xp.repository.ParticipanteRepository;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
+import br.edu.ifpb.pweb2.xp.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -28,6 +31,12 @@ public class JogoController {
 
     @Autowired
     private CorridaService corridaService;
+
+    @Autowired
+    private ResultadoService resultadoService;
+
+    @Autowired
+    private ParticipanteRepository participanteRepository;
 
     @GetMapping
     public ModelAndView exibirPergunta(HttpSession session) {
@@ -103,13 +112,37 @@ public class JogoController {
     @GetMapping("/fim")
     public ModelAndView fim(HttpSession session) {
         Long corridaId = (Long) session.getAttribute(SESSAO_CORRIDA_ID);
-        if (corridaId == null) {
+        Long participanteId = (Long) session.getAttribute("participanteId");
+        
+        if (corridaId == null || participanteId == null) {
             return new ModelAndView("redirect:/corridas");
         }
 
         List<Pergunta> perguntas = perguntaService.listarPorCorrida(corridaId);
         int total = perguntas.size();
         int acertos = acertosAtuais(session);
+
+        // Salvar resultado no banco de dados
+        try {
+            var participante = participanteRepository.findById(participanteId).orElse(null);
+            var corrida = corridaService.buscarPorId(corridaId);
+            
+            if (participante != null && corrida != null && total > 0) {
+                // Calcular pontuação: (acertos / total) * 100
+                BigDecimal pontuacao = BigDecimal.valueOf(acertos)
+                        .divide(BigDecimal.valueOf(total), 2, java.math.RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(100));
+                
+                resultadoService.salvar(participante, corrida, pontuacao);
+                
+                // Limpar dados da sessão após salvar
+                session.removeAttribute(SESSAO_CORRIDA_ID);
+                session.removeAttribute(SESSAO_PERGUNTA_INDICE);
+                session.removeAttribute(SESSAO_ACERTOS);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ModelAndView model = new ModelAndView("corridas/jogar/fim");
         model.addObject("corrida", corridaService.buscarPorId(corridaId));
