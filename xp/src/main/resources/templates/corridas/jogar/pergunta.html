@@ -1,224 +1,514 @@
 <!DOCTYPE html>
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <title>XP Corridas - Pergunta</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; }
-
-        .login-screen__center {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .jogo-header {
-            text-align: center;
-            margin-bottom: 24px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-family: Tahoma, sans-serif;
-        }
-
-        .jogo-header h1 { margin: 0 0 8px; font-size: 2.2em; }
-
-        .jogo-content {
-            width: 90%;
-            max-width: 720px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 32px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 2px solid #00489a;
-            color: #333;
-            font-family: Tahoma, sans-serif;
-        }
-
-        .jogo-progresso {
-            font-size: 0.95em;
-            color: #555;
-            margin-bottom: 16px;
-        }
-
-        .jogo-enunciado {
-            font-size: 1.25em;
-            font-weight: bold;
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-
-        .alternativa {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #fff;
-            cursor: pointer;
-        }
-
-        .alternativa:hover {
-            background: #f0f7ff;
-            border-color: #0058e3;
-        }
-
-        .alternativa input {
+        * {
             margin: 0;
-            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .feedback {
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-weight: bold;
+        body, html {
+            width: 100%;
+            height: 100%;
         }
 
-        .feedback--ok {
-            background: #e8f5e9;
-            border: 1px solid #4caf50;
-            color: #2e7d32;
-        }
-
-        .feedback--erro {
-            background: #ffebee;
-            border: 1px solid #e53935;
-            color: #c62828;
-        }
-
-        .jogo-actions {
-            margin-top: 24px;
+        /* Fundo Azul Windows XP */
+        .xp-background {
+            width: 100%;
+            height: 100vh;
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: center;
+            background: #3a6ea5;
         }
 
-        .timer-container {
+        /* Janela estilo Windows XP */
+        .xp-window {
+            background: #ece9d8;
+            border-radius: 8px 8px 5px 5px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border-top: 3px solid #0054e3;
+            overflow: hidden;
+            min-width: 520px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        /* Barra de título - igual à caixa de diálogo do XP */
+        .xp-titlebar {
+            height: 38px;
+            background: linear-gradient(to right, #0054e3, #3c8aed);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px 0 10px;
+        }
+
+        .xp-titlebar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .xp-icon {
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .xp-icon-inner {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+        }
+
+        .xp-title {
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* Botão Fechar (X vermelho) estilo Windows XP */
+        .xp-close-btn {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(to bottom, #f0f0f0, #d4d0c8);
+            border: 1px solid #ffffff;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: inset -1px -1px 1px #999, inset 1px 1px 0 #fff;
+            transition: all 0.05s linear;
+        }
+
+        .xp-close-btn:hover {
+            background: linear-gradient(to bottom, #ffb3b3, #e66a6a);
+            border-color: #ffcccc;
+        }
+
+        .xp-close-btn:active {
+            background: linear-gradient(to bottom, #cc5555, #aa3333);
+            transform: translateY(1px);
+        }
+
+        .xp-close-btn span {
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            margin-top: -2px;
+        }
+
+        /* Conteúdo da janela */
+        .xp-content {
+            padding: 24px 28px 28px 28px;
+        }
+
+        .xp-message {
             text-align: center;
-            margin-bottom: 16px;
-            padding: 12px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            border: 2px solid #00489a;
+            margin-bottom: 20px;
+        }
+
+        .xp-message h3 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+        }
+
+        .xp-message p {
+            color: #555;
+            font-size: 13px;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+        }
+
+        .timer-label {
+            color: #003366;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
         }
 
         .timer-display {
-            font-size: 2em;
             font-weight: bold;
-            color: #00489a;
+            color: #003366;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            background: #e8e4d8;
+            padding: 4px 12px;
+            border-radius: 4px;
+            display: inline-block;
         }
 
-        .timer-display.warning {
-            color: #ff9800;
+        /* Container da barra de progresso */
+        .progress-container {
+            margin: 20px 0;
         }
 
-        .timer-display.danger {
-            color: #f44336;
+        /* Frame da barra (carcaça) */
+        .progress-frame {
+            position: relative;
+            height: 26px;
+            background: #ffffff;
+            border: 1px solid #7f9db9;
+            border-radius: 3px;
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        /* Barra de progresso azul estilo XP */
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, #2b7ad9 0%, #1a5fb0 30%, #3c8aed 60%, #2b7ad9 100%);
+            background-size: 40px 100%;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        /* Efeito de brilho (shimmer) */
+        .shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0.35) 55%, transparent 70%);
+            animation: shimmer 1.2s ease-in-out infinite;
+        }
+
+        /* Padrão de blocos (efeito chunked) */
+        .chunked-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(255, 255, 255, 0.5) 6px, rgba(255, 255, 255, 0.5) 9px);
+            pointer-events: none;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            color: #003366;
+            font-weight: 500;
+        }
+
+        .progress-percentage {
+            font-weight: bold;
+            color: #1a5fb0;
+        }
+
+        .status-text {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-style: italic;
+        }
+
+        /* Alternativas */
+        .alternativa-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            margin: 8px 0;
+            background: #f8f7f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 13px;
+            transition: all 0.15s ease;
+        }
+
+        .alternativa-item:hover {
+            background: #e8f0fe;
+            border-color: #3c8aed;
+            transform: scale(1.01);
+        }
+
+        .alternativa-item input {
+            margin: 0;
+            cursor: pointer;
+            accent-color: #0054e3;
+        }
+
+        /* Botão confirmar (estilo Windows XP) */
+        .xp-button {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .xp-button button {
+            background: linear-gradient(to bottom, #ece9d8, #d4d0c8);
+            border: 1px solid #003c74;
+            border-radius: 4px;
+            padding: 8px 32px;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            color: #003c74;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: inset 1px 1px 0 #fff, 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .xp-button button:hover {
+            background: linear-gradient(to bottom, #f0f0ea, #e2e2d4);
+            border-color: #0054e3;
+        }
+
+        .xp-button button:active {
+            background: linear-gradient(to bottom, #d4d0c8, #c0bcb0);
+            transform: translateY(1px);
+        }
+
+        .xp-button button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Feedback */
+        .feedback-ok {
+            background: #d4ffd4;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 13px;
+            margin: 12px 0;
+        }
+
+        .feedback-erro {
+            background: #ffd4d4;
+            color: #c62828;
+            border: 1px solid #e53935;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-family: 'Segoe UI', 'Tahoma', sans-serif;
+            font-size: 13px;
+            margin: 12px 0;
+        }
+
+        /* Animações */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
     </style>
 </head>
 <body>
-<div class="login-screen">
-    <div class="login-screen__top"></div>
-
-    <div class="login-screen__center">
-
-        <div class="jogo-header">
-            <h1 th:text="'🏎️ ' + ${corrida.nome}">Corrida</h1>
-            <p th:if="${session.usuario != null}" th:text="'Jogador: ' + ${session.usuario}">Jogador</p>
-        </div>
-
-        <div class="jogo-content">
-
-            <div th:if="${session.tempoLimiteSegundos != null}" class="timer-container">
-                <p>Tempo restante:</p>
-                <div id="timer" class="timer-display" th:data-tempo-limite="${session.tempoLimiteSegundos}">00:00</div>
-            </div>
-
-            <p class="jogo-progresso"
-               th:text="'Pergunta ' + ${numero} + ' de ' + ${total}">
-                Pergunta 1 de 3
-            </p>
-
-            <div th:if="${feedbackMensagem != null}"
-                 class="feedback"
-                 th:classappend="${feedbackCorreto} ? ' feedback--ok' : ' feedback--erro'"
-                 th:text="${feedbackMensagem}">
-                Feedback
-            </div>
-
-            <p th:if="${erro != null}" class="feedback feedback--erro" th:text="${erro}"></p>
-
-            <p class="jogo-enunciado" th:text="${pergunta.enunciado}">
-                Enunciado da pergunta
-            </p>
-
-            <form th:action="@{/corridas/jogar/responder}" method="post">
-                <input type="hidden" name="perguntaId" th:value="${pergunta.id}">
-
-                <label class="alternativa"
-                       th:each="alt, stat : ${pergunta.alternativas}"
-                       th:for="${'resposta-' + stat.index}">
-                    <input type="radio"
-                           name="resposta"
-                           th:id="${'resposta-' + stat.index}"
-                           th:value="${stat.index}"
-                           required>
-                    <span th:text="${alt}">Alternativa</span>
-                </label>
-
-                <div class="jogo-actions">
-                    <button type="submit" class="login-screen__submit">Confirmar resposta</button>
+    <div class="xp-background">
+        <div class="xp-window">
+            <!-- Barra de título com X vermelho -->
+            <div class="xp-titlebar">
+                <div class="xp-titlebar-left">
+                    <div class="xp-icon">
+                        <div class="xp-icon-inner"></div>
+                    </div>
+                    <span class="xp-title">Corrida em andamento...</span>
                 </div>
-            </form>
+                <div class="xp-close-btn" onclick="window.location.href='/corridas'">
+                    <span>✕</span>
+                </div>
+            </div>
 
+            <div class="xp-content">
+                <div class="xp-message">
+                    <h3 th:text="'🏁 ' + ${corrida.nome}">Corrida XP</h3>
+                    <p>Piloto: <strong th:text="${session.usuario != null ? session.usuario : 'Convidado'}">Usuário</strong></p>
+                </div>
+
+                <div th:if="${session.tempoLimiteSegundos != null}">
+                    <div class="progress-container">
+                        <div class="progress-frame">
+                            <div id="progressBar" class="progress-bar">
+                                <div class="shimmer"></div>
+                                <div class="chunked-pattern"></div>
+                            </div>
+                        </div>
+                        <div class="progress-stats">
+                            <span>Tempo restante: <span id="timerDisplay" class="timer-display">1:00</span></span>
+                            <span id="percentualTexto" class="progress-percentage">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações da pergunta -->
+                <div class="xp-message" style="margin-top: 8px;">
+                    <p style="font-size: 12px; color: #777;"> Pergunta <span th:text="${numero}">1</span> de <span th:text="${total}">1</span></p>
+                </div>
+
+                <!-- Feedback -->
+                <div th:if="${feedbackMensagem != null}" 
+                     th:classappend="${feedbackCorreto} ? 'feedback-ok' : 'feedback-erro'"
+                     th:text="${feedbackMensagem}">
+                    Feedback
+                </div>
+
+                <!-- Enunciado -->
+                <div class="xp-message" style="margin: 12px 0 8px 0;">
+                    <p style="font-size: 15px; font-weight: 600; color: #003366; line-height: 1.4;" th:text="${pergunta.enunciado}">
+                        Enunciado da pergunta
+                    </p>
+                </div>
+
+                <!-- Alternativas -->
+                <form th:action="@{/corridas/jogar/responder}" method="post" id="respostaForm">
+                    <input type="hidden" name="perguntaId" th:value="${pergunta.id}">
+
+                    <div style="margin: 12px 0;">
+                        <label th:each="alt, stat : ${pergunta.alternativas}" class="alternativa-item">
+                            <input type="radio" name="resposta" th:value="${stat.index}" required>
+                            <span th:text="${alt}">Alternativa</span>
+                        </label>
+                    </div>
+
+                    <div class="xp-button">
+                        <button type="submit" id="submitBtn">Confirmar resposta</button>
+                    </div>
+                </form>
+
+                <div class="status-text">
+                    ⚠️ Por favor, não feche esta janela enquanto a pergunta estiver sendo processada.
+                </div>
+            </div>
         </div>
-
     </div>
 
-    <div class="login-screen__bottom">
-        <div class="login-screen__login-info">
-            <span>XP Corridas © IFPB PWEB2</span>
-        </div>
-    </div>
-</div>
+    <!-- Script do timer com barra de 0% a 100% -->
+    <script th:if="${session.tempoLimiteSegundos != null}">
+        (function() {
+            // Pega o tempo total da sessão (em segundos)
+            const tempoTotal = [[${session.tempoLimiteSegundos}]];
+            const progressBar = document.getElementById('progressBar');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const percentualSpan = document.getElementById('percentualTexto');
+            
+            let tempoRestante = tempoTotal;
+            let intervalo;
+            let redirecionou = false;
+            let submitted = false;
 
-<script th:if="${session.tempoLimiteSegundos != null}">
-    (function() {
-        const timerElement = document.getElementById('timer');
-        const tempoLimiteSegundos = parseInt(timerElement.getAttribute('data-tempo-limite'));
-        let tempoRestante = tempoLimiteSegundos;
-
-        function formatarTempo(segundos) {
-            const minutos = Math.floor(segundos / 60);
-            const seg = segundos % 60;
-            return String(minutos).padStart(2, '0') + ':' + String(seg).padStart(2, '0');
-        }
-
-        function atualizarTimer() {
-            timerElement.textContent = formatarTempo(tempoRestante);
-
-            if (tempoRestante <= 10) {
-                timerElement.classList.add('danger');
-            } else if (tempoRestante <= 30) {
-                timerElement.classList.add('warning');
+            function formatarTempo(segundos) {
+                const minutos = Math.floor(segundos / 60);
+                const seg = segundos % 60;
+                return minutos + ':' + String(seg).padStart(2, '0');
             }
 
-            if (tempoRestante <= 0) {
-                window.location.href = '/corridas/jogar/fim';
-                return;
+            function atualizarProgresso() {
+                // Calcula o percentual JÁ CONCLUÍDO (0% a 100%)
+                // Concluído = (tempoTotal - tempoRestante) / tempoTotal * 100
+                const percentualConcluido = ((tempoTotal - tempoRestante) / tempoTotal) * 100;
+                const percentualFinal = Math.min(100, Math.max(0, percentualConcluido));
+                
+                // Atualiza a largura da barra (agora começa em 0 e vai até 100)
+                progressBar.style.width = percentualFinal + '%';
+                
+                // Atualiza o texto da porcentagem
+                percentualSpan.textContent = Math.floor(percentualFinal) + '%';
+                
+                // Atualiza o display do timer
+                timerDisplay.textContent = formatarTempo(tempoRestante);
+                
+                // Muda a cor do timer conforme o tempo restante
+                const percentualRestante = (tempoRestante / tempoTotal) * 100;
+                if (percentualRestante <= 20) {
+                    timerDisplay.style.color = '#c62828';
+                    timerDisplay.style.background = '#ffe0e0';
+                } else if (percentualRestante <= 50) {
+                    timerDisplay.style.color = '#e67e22';
+                    timerDisplay.style.background = '#fff0e0';
+                } else {
+                    timerDisplay.style.color = '#003366';
+                    timerDisplay.style.background = '#e8e4d8';
+                }
             }
 
-            tempoRestante--;
-        }
+            function tick() {
+                if (redirecionou) return;
+                
+                if (tempoRestante <= 0) {
+                    if (!redirecionou) {
+                        redirecionou = true;
+                        clearInterval(intervalo);
+                        window.location.href = '/corridas/jogar/fim';
+                    }
+                    return;
+                }
+                
+                tempoRestante--;
+                atualizarProgresso();
+            }
 
-        atualizarTimer();
-        setInterval(atualizarTimer, 1000);
-    })();
-</script>
+            // Prevenir envio múltiplo
+            const form = document.getElementById('respostaForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (submitted) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    submitted = true;
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = '⏳ Enviando...';
+                    }
+                    clearInterval(intervalo);
+                    return true;
+                });
+            }
 
+            // Inicializa
+            atualizarProgresso();
+            intervalo = setInterval(tick, 1000);
+        })();
+    </script>
+
+    <!-- Fallback sem timer -->
+    <script th:unless="${session.tempoLimiteSegundos != null}">
+        (function() {
+            const form = document.getElementById('respostaForm');
+            const submitBtn = document.getElementById('submitBtn');
+            let submitted = false;
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (submitted) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    submitted = true;
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.textContent = '⏳ Enviando...';
+                    }
+                    return true;
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
