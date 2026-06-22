@@ -13,7 +13,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
 
-        // permitir caminhos públicos
         if (uri.startsWith("/auth") || uri.startsWith("/css") || uri.startsWith("/js") || uri.startsWith("/static") || uri.startsWith("/ranking") || uri.startsWith("/error") || uri.startsWith("/webjars")) {
             return true;
         }

@@ -1,20 +1,3 @@
-package br.edu.ifpb.pweb2.xp.service;
-
-import br.edu.ifpb.pweb2.xp.model.Corrida;
-import br.edu.ifpb.pweb2.xp.model.Participante;
-import br.edu.ifpb.pweb2.xp.model.Resultado;
-import br.edu.ifpb.pweb2.xp.repository.ResultadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 @Service
 public class ResultadoService {
 
@@ -22,10 +5,14 @@ public class ResultadoService {
     private ResultadoRepository repository;
     
     @Autowired
-    private ParticipanteService participanteService; // Injete o novo service
+    private ParticipanteService participanteService;
 
     @Transactional
     public Resultado salvar(Participante participante, Corrida corrida, BigDecimal pontuacao) {
+        if (participante == null || participante.getNome() == null) {
+            throw new ValidationException("Dados do participante inválidos");
+        }
+        
         Participante participantePersistido = participanteService.buscarOuCriar(participante.getNome());
         
         Resultado resultado = new Resultado();
@@ -36,11 +23,11 @@ public class ResultadoService {
         return repository.save(resultado);
     }
 
-public Page<Resultado> rankingGeral(Pageable pageable) {
-    return repository.findAllByOrderByPontuacaoDescDataHoraDesc(pageable);
-}
+    public Page<Resultado> rankingGeral(Pageable pageable) {
+        return repository.findAllByOrderByPontuacaoDescDataHoraDesc(pageable);
+    }
 
-public Page<Resultado> rankingPorCorrida(Long corridaId, Pageable pageable) {
-    return repository.findRankingPorCorrida(corridaId, pageable);
-}
+    public Page<Resultado> rankingPorCorrida(Long corridaId, Pageable pageable) {
+        return repository.findRankingPorCorrida(corridaId, pageable);
+    }
 }

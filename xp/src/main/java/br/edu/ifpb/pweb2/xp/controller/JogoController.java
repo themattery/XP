@@ -174,5 +174,5 @@ public class JogoController {
 
         long segundosDecorridos = ChronoUnit.SECONDS.between(tempoInicio, LocalDateTime.now());
         return segundosDecorridos >= tempoLimiteSegundos;
-    }
+    }   
 }
