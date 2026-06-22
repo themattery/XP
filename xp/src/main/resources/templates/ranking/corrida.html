@@ -35,14 +35,36 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="r, stat : ${resultados}">
-                <td th:text="${stat.count}" style="font-weight: bold;">1</td>
+<tbody>
+<tr th:each="r, stat : ${resultados.content}">                <td th:text="${currentPage * 10 + stat.count}">
                 <td th:text="${r.participante.nome}">Nome</td>
                 <td th:text="${r.pontuacao} + ' pts'">0</td>
                 <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}">Data</td>
             </tr>
             </tbody>
         </table>
+        <div style="margin-top:15px;text-align:center;">
+
+    <a th:if="${currentPage > 0}"
+       th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage - 1})}"
+       class="xp-button">
+        ◀ Anterior
+    </a>
+
+    <span style="margin:0 15px;">
+        Página
+        <span th:text="${currentPage + 1}"></span>
+        de
+        <span th:text="${totalPages}"></span>
+    </span>
+
+    <a th:if="${currentPage + 1 < totalPages}"
+       th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage + 1})}"
+       class="xp-button">
+        Próxima ▶
+    </a>
+
+</div>
     </div>
 </div>
 

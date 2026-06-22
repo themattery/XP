@@ -12,15 +12,11 @@ import org.springframework.stereotype.Repository;
 public interface ResultadoRepository extends JpaRepository<Resultado, Long> {
 
     Page<Resultado> findAllByOrderByPontuacaoDescDataHoraDesc(Pageable pageable);
-
-    @Query("""
-        select r
-        from Resultado r
-        where r.corrida.id = :corridaId
-        order by r.pontuacao desc, r.dataHora desc
-    """)
-    Page<Resultado> findRankingPorCorrida(
-            @Param("corridaId") Long corridaId,
-            Pageable pageable
-    );
+@Query("select r from Resultado r " +
+       "where r.corrida.id = :corridaId " +
+       "order by r.pontuacao desc, r.dataHora desc")
+Page<Resultado> findRankingPorCorrida(
+        @Param("corridaId") Long corridaId,
+        Pageable pageable
+);
 }
