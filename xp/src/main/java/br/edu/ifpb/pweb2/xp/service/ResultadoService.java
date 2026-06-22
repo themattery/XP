@@ -12,6 +12,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 public class ResultadoService {
 
@@ -33,11 +36,11 @@ public class ResultadoService {
         return repository.save(resultado);
     }
 
-    public List<Resultado> rankingGeral() {
-        return repository.findAllByOrderByPontuacaoDescDataHoraDesc();
-    }
+public Page<Resultado> rankingGeral(Pageable pageable) {
+    return repository.findAllByOrderByPontuacaoDescDataHoraDesc(pageable);
+}
 
-    public List<Resultado> rankingPorCorrida(Long corridaId) {
-        return repository.findRankingPorCorrida(corridaId);
-    }
+public Page<Resultado> rankingPorCorrida(Long corridaId, Pageable pageable) {
+    return repository.findRankingPorCorrida(corridaId, pageable);
+}
 }

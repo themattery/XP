@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PerguntaService {
@@ -69,7 +70,7 @@ public class PerguntaService {
         return alternativas.stream()
                 .filter(a -> a != null && !a.isBlank())
                 .map(String::trim)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public List<Pergunta> listarTodos() {
