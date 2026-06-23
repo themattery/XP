@@ -18,5 +18,10 @@ public interface ResultadoRepository extends JpaRepository<Resultado, Long> {
 Page<Resultado> findRankingPorCorrida(
         @Param("corridaId") Long corridaId,
         Pageable pageable
+    
 );
+
+boolean existsByCorridaId(Long corridaId);
+long countByCorridaId(Long corridaId);
+
 }

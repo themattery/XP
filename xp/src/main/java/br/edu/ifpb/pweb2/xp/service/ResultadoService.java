@@ -1,3 +1,19 @@
+package br.edu.ifpb.pweb2.xp.service;
+
+import br.edu.ifpb.pweb2.xp.exception.ValidationException;
+import br.edu.ifpb.pweb2.xp.model.Corrida;
+import br.edu.ifpb.pweb2.xp.model.Participante;
+import br.edu.ifpb.pweb2.xp.model.Resultado;
+import br.edu.ifpb.pweb2.xp.repository.ResultadoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Service
 public class ResultadoService {
 
@@ -29,5 +45,13 @@ public class ResultadoService {
 
     public Page<Resultado> rankingPorCorrida(Long corridaId, Pageable pageable) {
         return repository.findRankingPorCorrida(corridaId, pageable);
+    }
+
+    public boolean existeResultadoPorCorrida(Long corridaId) {
+        return repository.existsByCorridaId(corridaId);
+    }
+
+    public long contarResultadosPorCorrida(Long corridaId) {
+        return repository.countByCorridaId(corridaId);
     }
 }
