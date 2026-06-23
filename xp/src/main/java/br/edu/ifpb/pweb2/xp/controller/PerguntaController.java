@@ -1,5 +1,6 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
+import br.edu.ifpb.pweb2.xp.config.UploadUtil;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -58,6 +60,7 @@ public class PerguntaController {
             @RequestParam String enunciado,
             @RequestParam List<String> alternativas,
             @RequestParam Integer respostaCorreta,
+            @RequestParam(value = "imagemFile", required = false) MultipartFile imagemFile,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -66,7 +69,10 @@ public class PerguntaController {
             return redirect;
         }
 
-        perguntaService.salvar(corridaId, enunciado, alternativas, respostaCorreta);
+        // Processa o arquivo físico no HD e retorna o nome único (String) gerado
+        String nomeImagem = UploadUtil.salvarImagem(imagemFile);
+
+        perguntaService.salvar(corridaId, enunciado, alternativas, respostaCorreta, nomeImagem);
         redirectAttributes.addFlashAttribute("mensagem", "Pergunta cadastrada com sucesso.");
         return "redirect:/corridas/" + corridaId + "/perguntas";
     }

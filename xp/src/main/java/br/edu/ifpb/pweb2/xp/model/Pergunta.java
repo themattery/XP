@@ -24,4 +24,6 @@ public class Pergunta {
     @JoinColumn(name = "corrida_id")
     private Corrida corrida;
 
+    private String imagem;
+
 }

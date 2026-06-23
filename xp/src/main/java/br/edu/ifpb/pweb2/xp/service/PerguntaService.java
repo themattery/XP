@@ -36,7 +36,7 @@ public class PerguntaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pergunta não encontrada"));
     }
 
-    public Pergunta salvar(Long corridaId, String enunciado, List<String> alternativas, Integer respostaCorreta) {
+    public Pergunta salvar(Long corridaId, String enunciado, List<String> alternativas, Integer respostaCorreta, String nomeImagem) {
         Corrida corrida = corridaService.buscarPorId(corridaId);
         List<String> alternativasValidas = filtrarAlternativas(alternativas);
         validarDados(enunciado, alternativasValidas, respostaCorreta);
@@ -46,6 +46,8 @@ public class PerguntaService {
         pergunta.setAlternativas(new ArrayList<>(alternativasValidas));
         pergunta.setRespostaCorreta(respostaCorreta);
         pergunta.setCorrida(corrida);
+        // Atribui o nome da imagem obtido no upload para salvar no banco
+        pergunta.setImagem(nomeImagem);
         return repository.save(pergunta);
     }
 
