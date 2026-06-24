@@ -6,6 +6,7 @@ import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class CorridaController {
     }
 
     @GetMapping("/novo")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView formularioCadastro(HttpSession session) {
         String redirect = exigirAdmin(session);
         if (redirect != null) {
@@ -51,6 +53,7 @@ public class CorridaController {
     }
 
     @GetMapping("/{id}/editar")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView formularioEdicao(@PathVariable Long id, HttpSession session) {
         String redirect = exigirAdmin(session);
         if (redirect != null) {
@@ -64,6 +67,7 @@ public class CorridaController {
     }
 
     @PostMapping("/salvar")
+    @PreAuthorize("hasRole('ADMIN')")
     public String salvar(
             @Valid Corrida corrida,
             BindingResult result,
@@ -95,6 +99,7 @@ public class CorridaController {
     }
 
     @PostMapping("/{id}/excluir")
+    @PreAuthorize("hasRole('ADMIN')")
     public String excluir(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         String redirect = exigirAdmin(session);
         if (redirect != null) {

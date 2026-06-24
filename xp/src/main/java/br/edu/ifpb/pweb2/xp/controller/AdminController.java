@@ -7,6 +7,7 @@ import br.edu.ifpb.pweb2.xp.service.ResultadoService;
 import br.edu.ifpb.pweb2.xp.service.ParticipanteService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class AdminController {
     private ParticipanteService participanteService;
 
     @GetMapping("/dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView dashboard(HttpSession session) {
         if (!Boolean.TRUE.equals(session.getAttribute("usuarioAdmin"))) {
             return new ModelAndView("redirect:/corridas");

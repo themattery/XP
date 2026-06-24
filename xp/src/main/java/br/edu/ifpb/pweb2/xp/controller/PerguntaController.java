@@ -5,6 +5,7 @@ import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ public class PerguntaController {
     private CorridaService corridaService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView listar(@PathVariable Long corridaId, HttpSession session) {
         String redirect = exigirAdmin(session);
         if (redirect != null) {
@@ -43,6 +45,7 @@ public class PerguntaController {
     }
 
     @GetMapping("/novo")
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView formulario(@PathVariable Long corridaId, HttpSession session) {
         String redirect = exigirAdmin(session);
         if (redirect != null) {
@@ -55,6 +58,7 @@ public class PerguntaController {
     }
 
     @PostMapping("/salvar")
+    @PreAuthorize("hasRole('ADMIN')")
     public String salvar(
             @PathVariable Long corridaId,
             @RequestParam String enunciado,
@@ -78,6 +82,7 @@ public class PerguntaController {
     }
 
     @PostMapping("/{perguntaId}/excluir")
+    @PreAuthorize("hasRole('ADMIN')")
     public String excluir(
             @PathVariable Long corridaId,
             @PathVariable Long perguntaId,
