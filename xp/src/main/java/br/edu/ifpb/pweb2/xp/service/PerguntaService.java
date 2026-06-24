@@ -78,6 +78,11 @@ public class PerguntaService {
     public List<Pergunta> listarTodos() {
         return repository.findAll();
     }
+
+    public long contarPorCorrida(Long corridaId) {
+        return repository.countByCorridaId(corridaId);
+    }
+
     private void validarDados(String enunciado, List<String> alternativas, Integer respostaCorreta) {
         if (enunciado == null || enunciado.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Enunciado é obrigatório");

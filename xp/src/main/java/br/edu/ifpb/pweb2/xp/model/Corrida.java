@@ -16,4 +16,6 @@ public class Corrida {
     @Column(name = "tempo_limite_segundos")
     private Integer tempoLimiteSegundos;
 
+    private Boolean ativa = true;
+
 }

@@ -11,6 +11,8 @@ public interface PerguntaRepository extends JpaRepository<Pergunta, Long> {
 
     List<Pergunta> findByCorridaIdOrderByIdAsc(Long corridaId);
 
+    long countByCorridaId(Long corridaId);
+
     void deleteByCorridaId(Long corridaId);
 
 }

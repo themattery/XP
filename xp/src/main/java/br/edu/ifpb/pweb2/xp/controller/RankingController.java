@@ -1,5 +1,6 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
+import br.edu.ifpb.pweb2.xp.model.Resultado;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.ResultadoService;
 import jakarta.servlet.http.HttpSession;

@@ -31,21 +31,21 @@ public class CorridaService {
     }
 
     public List<Corrida> listarAtivas() {
-        return repository.findByAtivaTrue();
+        return repository.findByAtivaTrueOrAtivaIsNull();
     }
 
     public Corrida salvar(Corrida corrida) {
         // Validações básicas
-        if (corrida.getTitulo() == null || corrida.getTitulo().trim().isEmpty()) {
+        if (corrida.getNome() == null || corrida.getNome().trim().isEmpty()) {
             throw new ValidationException("O título da corrida é obrigatório");
         }
-        if (corrida.getTempoSegundos() == null) {
+        if (corrida.getTempoLimiteSegundos() == null) {
             throw new ValidationException("O tempo limite é obrigatório");
         }
-        if (corrida.getTempoSegundos() < 10) {
+        if (corrida.getTempoLimiteSegundos() < 10) {
             throw new ValidationException("O tempo mínimo é de 10 segundos");
         }
-        if (corrida.getTempoSegundos() > 600) {
+        if (corrida.getTempoLimiteSegundos() > 600) {
             throw new ValidationException("O tempo máximo é de 600 segundos (10 minutos)");
         }
         
@@ -65,10 +65,10 @@ public class CorridaService {
     public void excluir(Long id) {
         Corrida corrida = buscarPorId(id);
         
-        long totalResultados = resultadoRepository.countResultadosPorCorrida(id);
+        long totalResultados = resultadoRepository.countByCorridaId(id);
         if (totalResultados > 0) {
             throw new BusinessException(
-                "❌ Não é possível excluir a corrida \"" + corrida.getTitulo() + 
+                "❌ Não é possível excluir a corrida \"" + corrida.getNome() +
                 "\" pois ela já possui " + totalResultados + " resultado(s) registrado(s)."
             );
         }
@@ -80,7 +80,7 @@ public class CorridaService {
             
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(
-                "Não foi possível excluir a corrida \"" + corrida.getTitulo() + 
+                "Não foi possível excluir a corrida \"" + corrida.getNome() +
                 "\" pois existem dados vinculados a ela."
             );
         }
@@ -98,6 +98,6 @@ public class CorridaService {
     }
 
     public long contarResultados(Long id) {
-        return resultadoRepository.countResultadosPorCorrida(id);
+        return resultadoRepository.countByCorridaId(id);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ResultadoService {
@@ -41,6 +42,10 @@ public class ResultadoService {
 
     public Page<Resultado> rankingGeral(Pageable pageable) {
         return repository.findAllByOrderByPontuacaoDescDataHoraDesc(pageable);
+    }
+
+    public List<Resultado> rankingGeral() {
+        return repository.findAllByOrderByPontuacaoDescDataHoraDesc(Pageable.unpaged()).getContent();
     }
 
     public Page<Resultado> rankingPorCorrida(Long corridaId, Pageable pageable) {

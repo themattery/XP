@@ -106,13 +106,13 @@ public class CorridaController {
             
             if (service.possuiResultados(id)) {
                 redirectAttributes.addFlashAttribute("erro", 
-                    "❌ Não é possível excluir a corrida \"" + corrida.getTitulo() + 
+                    "❌ Não é possível excluir a corrida \"" + corrida.getNome() +
                     "\" pois ela já possui resultados registrados.");
                 return "redirect:/corridas";
             }
             
             service.excluir(id);
-            redirectAttributes.addFlashAttribute("mensagem", "Corrida \"" + corrida.getTitulo() + "\" excluída com sucesso!");
+            redirectAttributes.addFlashAttribute("mensagem", "Corrida \"" + corrida.getNome() + "\" excluída com sucesso!");
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("erro", "❌ " + e.getMessage());
@@ -126,7 +126,7 @@ public class CorridaController {
             Corrida corrida = service.buscarPorId(id);
             
             // Verificar se a corrida está ativa
-            if (!corrida.getAtiva()) {
+            if (Boolean.FALSE.equals(corrida.getAtiva())) {
                 redirectAttributes.addFlashAttribute("erro", "Esta corrida não está disponível no momento!");
                 return "redirect:/corridas";
             }
@@ -142,12 +142,12 @@ public class CorridaController {
             session.setAttribute("tempoInicioCorrida", LocalDateTime.now());
             session.setAttribute("perguntaIndice", 0);
             session.setAttribute("acertos", 0);
-            session.setAttribute("tempoLimiteSegundos", corrida.getTempoSegundos());
+            session.setAttribute("tempoLimiteSegundos", corrida.getTempoLimiteSegundos());
             session.setAttribute("totalPerguntas", totalPerguntas);
 
             redirectAttributes.addFlashAttribute("mensagem", 
-                "Corrida \"" + corrida.getTitulo() + "\" iniciada! Você tem " + 
-                corrida.getTempoSegundos() + " segundos para responder " + totalPerguntas + " perguntas. Boa sorte!");
+                "Corrida \"" + corrida.getNome() + "\" iniciada! Você tem " +
+                corrida.getTempoLimiteSegundos() + " segundos para responder " + totalPerguntas + " perguntas. Boa sorte!");
             return "redirect:/corridas/jogar";
             
         } catch (Exception e) {
