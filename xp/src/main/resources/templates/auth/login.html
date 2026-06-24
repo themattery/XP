@@ -44,9 +44,16 @@
 
                             <input
                                     type="text"
-                                    name="nome"
-                                    id="nome"
-                                    placeholder="Digite seu nome"
+                                    name="username"
+                                    id="username"
+                                    placeholder="Usuario"
+                                    required>
+
+                            <input
+                                    type="password"
+                                    name="password"
+                                    id="password"
+                                    placeholder="Senha"
                                     required>
 
                             <button
@@ -58,6 +65,14 @@
                             </button>
 
                         </form>
+
+                        <span th:if="${param.error}" class="login-screen__message">
+                            Usuario ou senha invalidos
+                        </span>
+
+                        <span th:if="${param.logout}" class="login-screen__message">
+                            Logout realizado com sucesso
+                        </span>
 
                     </div>
                 </div>
