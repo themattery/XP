@@ -98,12 +98,17 @@
         </div>
 
         <div class="form-content">
-            <form th:action="@{/corridas/{id}/perguntas/salvar(id=${corrida.id})}" method="post">
+            <form th:action="@{/corridas/{id}/perguntas/salvar(id=${corrida.id})}" method="post" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="enunciado">Enunciado:</label>
                     <input type="text" id="enunciado" name="enunciado"
                            placeholder="Digite a pergunta" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagemFile">Imagem da Pergunta (Opcional):</label>
+                    <input type="file" id="imagemFile" name="imagemFile" accept="image/*">
                 </div>
 
                 <div class="form-group">

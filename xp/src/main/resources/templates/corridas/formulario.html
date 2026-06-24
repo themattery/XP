@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${edicao} ? 'XP Corridas - Editar Corrida' : 'XP Corridas - Nova Corrida'">XP Corridas</title>
+    <title th:text="${edicao} ? 'XP Corridas - Editar Pergunta' : 'XP Corridas - Nova Pergunta'">XP Corridas - Pergunta</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
         body, html { margin: 0; padding: 0; height: 100%; }
@@ -16,23 +16,22 @@
 
         .form-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .form-header h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
             margin: 0;
             font-family: 'Tahoma', sans-serif;
         }
 
-        /* Container do Formulário (Estilo Janela de Diálogo) */
         .form-content {
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 2px solid #00489a;
@@ -40,25 +39,26 @@
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
             font-family: 'Tahoma', sans-serif;
             font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+            margin-bottom: 8px;
+            font-size: 1em;
             color: #00489a;
         }
 
-        .form-group input {
+        .form-group input[type="text"], 
+        .form-group input[type="file"] {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 1em;
-            box-sizing: border-box; /* Garante que o padding não estoure a largura */
+            font-size: 0.95em;
+            box-sizing: border-box;
         }
 
         .form-group input:focus {
@@ -67,11 +67,19 @@
             box-shadow: 0 0 5px rgba(0,88,227,0.3);
         }
 
+        .alternativas-bucket {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px dashed #00489a;
+            margin-bottom: 15px;
+        }
+
         .button-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         .btn-cancelar {
@@ -93,41 +101,48 @@
         <div class="login-screen__center">
             
             <div class="form-header">
-                <h1 th:text="${edicao} ? '✏️ Editar Corrida' : '🆕 Nova Corrida'">Nova Corrida</h1>
-                <p th:text="${edicao} ? 'Altere o nome da corrida' : 'Preencha os dados abaixo para criar o evento'">
-                    Preencha os dados abaixo
-                </p>
+                <h1 th:text="${edicao} ? '✏️ Editar Pergunta' : '🆕 Nova Pergunta'">Nova Pergunta</h1>
+                <p>Corrida: <strong th:text="${corrida.nome}">Nome da Corrida</strong></p>
             </div>
 
             <div class="form-content">
-                <form th:action="@{/corridas/salvar}" th:object="${corrida}" method="post">
-
-                    <input type="hidden" th:field="*{id}">
+                <form th:action="@{/corridas/{id}/perguntas/salvar(id=${corrida.id})}" th:object="${pergunta}" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
-                        <label for="nome">Nome da Corrida:</label>
-                        <input type="text" 
-                               th:field="*{nome}" 
-                               id="nome" 
-                               placeholder="Ex: Grande Prêmio de Interlagos" 
-                               required>
+                        <label for="enunciado">Enunciado da Pergunta:</label>
+                        <input type="text" id="enunciado" name="enunciado" placeholder="Ex: Qual é a sintaxe correta para..." required>
                     </div>
 
                     <div class="form-group">
-                        <label for="tempoLimiteSegundos">Tempo Limite (segundos):</label>
-                        <input type="number" 
-                               th:field="*{tempoLimiteSegundos}" 
-                               id="tempoLimiteSegundos" 
-                               placeholder="Ex: 300 (5 minutos)" 
-                               min="1"
-                               required>
+                        <label for="imagemFile">Imagem Ilustrativa (Opcional):</label>
+                        <input type="file" id="imagemFile" name="imagemFile" accept="image/*">
                     </div>
 
+                    <div class="alternativas-bucket">
+                        <label style="font-family: 'Tahoma', sans-serif; font-weight: bold; color: #00489a; display:block; margin-bottom: 10px;">
+                            Alternativas:
+                        </label>
+                        
+                        <div class="form-group">
+                            <label>Alternativas (marque a correta):</label>
+
+                            <div class="alternativa-item">
+                                <input type="radio" name="respostaCorreta" value="0" required>
+                                <input type="text" name="alternativas[0]" placeholder="Alternativa A" required>
+                            </div>
+                            <div class="alternativa-item">
+                                <input type="radio" name="respostaCorreta" value="1">
+                                <input type="text" name="alternativas[1]" placeholder="Alternativa B" required>
+                            </div>
+                            <div class="alternativa-item">
+                                <input type="radio" name="respostaCorreta" value="2">
+                                <input type="text" name="alternativas[2]" placeholder="Alternativa C" required>
+                            </div>
+                        </div>
                     <div class="button-group">
-                        <a href="/corridas" class="btn-cancelar">Voltar ao Lobby</a>
-                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;"
-                                th:text="${edicao} ? 'Atualizar Corrida' : 'Salvar Corrida'">
-                            Salvar Corrida
+                        <a th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}" class="btn-cancelar">Cancelar</a>
+                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;">
+                            Salvar Pergunta
                         </button>
                     </div>
                 </form>

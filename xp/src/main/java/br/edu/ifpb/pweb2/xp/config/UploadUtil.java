@@ -10,8 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadUtil {
 
     // Define onde as imagens vão ficar salvas de forma centralizada no computador
-    private static final String DIRETORIO_UPLOADS = System.getProperty("user.home") + "/xp_uploads";
-
+    private static final Path DIRETORIO_UPLOADS = Paths.get("uploads").toAbsolutePath().normalize();
     public static String salvarImagem(MultipartFile arquivo) {
         // Se o utilizador não enviou nenhum ficheiro, retorna nulo para não quebrar o fluxo
         if (arquivo == null || arquivo.isEmpty()) {
@@ -20,7 +19,7 @@ public class UploadUtil {
 
         try {
             // 1. Cria a pasta física no computador caso ela ainda não exista
-            Path pastaDefinitiva = Paths.get(DIRETORIO_UPLOADS);
+            Path pastaDefinitiva = DIRETORIO_UPLOADS;
             if (!Files.exists(pastaDefinitiva)) {
                 Files.createDirectories(pastaDefinitiva);
             }
@@ -46,6 +45,11 @@ public class UploadUtil {
     }
 
     public static String getDiretorioUploads() {
-        return DIRETORIO_UPLOADS;
+        return DIRETORIO_UPLOADS.toString();
+    }
+
+    public static String getDiretorioUploadsUri() {
+        String uri = DIRETORIO_UPLOADS.toUri().toString();
+        return uri.endsWith("/") ? uri : uri + "/";
     }
 }

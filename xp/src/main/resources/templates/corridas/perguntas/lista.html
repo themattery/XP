@@ -110,6 +110,18 @@
         }
 
         .btn-voltar:hover { text-decoration: underline; }
+
+        .pergunta-imagem {
+            display: block;
+            max-width: 120px;
+            max-height: 80px;
+            margin-top: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+        }
+
     </style>
 </head>
 <body>
@@ -148,7 +160,14 @@
                 <tbody>
                     <tr th:each="pergunta : ${perguntas}">
                         <td th:text="${pergunta.id}">1</td>
-                        <td th:text="${pergunta.enunciado}">Enunciado</td>
+                        <td>
+                            <span th:text="${pergunta.enunciado}">Enunciado</span>
+
+                            <img th:if="${pergunta.imagem != null}" 
+                                 th:src="@{/imagens-upload/{nome}(nome=${pergunta.imagem})}" 
+                                 class="pergunta-imagem" 
+                                 alt="Imagem da pergunta">
+                        </td>
                         <td>
                             <ul class="alternativas-lista">
                                 <li th:each="alt, stat : ${pergunta.alternativas}"

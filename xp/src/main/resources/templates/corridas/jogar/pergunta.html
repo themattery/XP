@@ -308,6 +308,16 @@
             margin: 12px 0;
         }
 
+        .pergunta-midia {
+            display: block;
+            max-width: 100%;
+            max-height: 220px;
+            margin: 15px auto;
+            border-radius: 4px;
+            border: 1px solid #bdbeaf;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
         /* Animações */
         @keyframes shimmer {
             0% { transform: translateX(-100%); }
@@ -373,6 +383,11 @@
                     </p>
                 </div>
 
+                <img th:if="${pergunta.imagem != null}" 
+                     th:src="@{/imagens-upload/{nome}(nome=${pergunta.imagem})}" 
+                     class="pergunta-midia" 
+                     alt="Imagem da pergunta">
+
                 <!-- Alternativas -->
                 <form th:action="@{/corridas/jogar/responder}" method="post" id="respostaForm">
                     <input type="hidden" name="perguntaId" th:value="${pergunta.id}">
@@ -400,7 +415,7 @@
     <script th:if="${session.tempoLimiteSegundos != null}">
         (function() {
             // Pega o tempo total da sessão (em segundos)
-            const tempoTotal = [[${session.tempoLimiteSegundos}]];
+            const tempoTotal = /*[[${session.tempoLimiteSegundos}]]*/ 60; 
             const progressBar = document.getElementById('progressBar');
             const timerDisplay = document.getElementById('timerDisplay');
             const percentualSpan = document.getElementById('percentualTexto');

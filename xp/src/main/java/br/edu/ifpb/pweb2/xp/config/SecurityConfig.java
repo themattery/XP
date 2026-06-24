@@ -28,7 +28,7 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
-                                "/imagens-uploads/**",
+                                "/imagens-upload/**",
                                 "/webjars/**",
                                 "/error"
                         ).permitAll()
