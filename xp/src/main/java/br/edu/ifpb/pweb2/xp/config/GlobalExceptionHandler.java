@@ -1,6 +1,7 @@
 package br.edu.ifpb.pweb2.xp.config;
 
 import br.edu.ifpb.pweb2.xp.exception.NotFoundException;
+import br.edu.ifpb.pweb2.xp.exception.BusinessException;
 import br.edu.ifpb.pweb2.xp.exception.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
         redirectAttributes.addFlashAttribute("erro", ex.getMessage());
         String referer = ex.getReferer() != null ? ex.getReferer() : "/corridas";
         return "redirect:" + referer;
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public String handleBusiness(BusinessException ex, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("erro", ex.getMessage());
+        return "redirect:/corridas";
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
