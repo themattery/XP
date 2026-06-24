@@ -28,6 +28,11 @@ INSERT INTO participante (nome, admin)
 SELECT 'Maria', FALSE
 WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Maria');
 
+UPDATE participante
+SET senha = '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE nome IN ('Admin', 'Joao', 'Maria')
+  AND (senha IS NULL OR senha = '');
+
 -- Participante x Corrida (ManyToMany) ----------------------------------------
 INSERT INTO participante_corridas (participante_id, corridas_id)
 SELECT p.id, c.id

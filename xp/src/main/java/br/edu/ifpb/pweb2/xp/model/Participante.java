@@ -20,6 +20,8 @@ public class Participante {
 
     private String nome;
 
+    private String senha;
+
     private Boolean admin;
 
     @ManyToMany
