@@ -16,14 +16,15 @@ public interface PerguntaRepository extends JpaRepository<Pergunta, Long> {
 
     long countByCorridaId(Long corridaId);
 
-    @Modifying
-    @Query(value = """
-            DELETE FROM pergunta_alternativas
-            WHERE pergunta_id IN (
-                SELECT id FROM pergunta WHERE corrida_id = :corridaId
-            )
-            """, nativeQuery = true)
-    void deleteAlternativasByCorridaId(@Param("corridaId") Long corridaId);
+   @Modifying
+@Query(
+    value = "DELETE FROM pergunta_alternativas " +
+            "WHERE pergunta_id IN (" +
+            "SELECT id FROM pergunta WHERE corrida_id = :corridaId" +
+            ")",
+    nativeQuery = true
+)
+void deleteAlternativasByCorridaId(@Param("corridaId") Long corridaId);
 
     void deleteByCorridaId(Long corridaId);
 
