@@ -20,25 +20,45 @@
             Voltar para o Lobby
         </a>
 
-        <form th:action="@{/ranking/corrida/{id}(id=${corrida.id})}" method="get" class="xp-page-size-form" style="display:flex; align-items:center; gap:8px; margin: 0 12px;" onsubmit="document.getElementById('corridaSize').value = this.customSize.value || this.presetSize.value;">
+        <form th:action="@{/ranking/corrida/{id}(id=${corrida.id})}"
+              method="get"
+              class="xp-page-size-form"
+              style="display:flex; align-items:center; gap:8px; margin: 0 12px;"
+              onsubmit="document.getElementById('corridaSize').value = this.customSize.value || this.presetSize.value;">
+
             <input type="hidden" name="page" value="0">
             <input type="hidden" id="corridaSize" name="size" th:value="${pageSize}">
-            <label for="size" style="font-weight:bold; color:#003099;">Linhas:</label>
-            <select id="presetSize" name="presetSize" onchange="document.getElementById('corridaSize').value = this.value; this.form.submit();">
+
+            <label style="font-weight:bold; color:#003099;">
+                Linhas:
+            </label>
+
+            <select id="presetSize"
+                    name="presetSize"
+                    onchange="document.getElementById('corridaSize').value = this.value; this.form.submit();">
+
                 <option th:each="option : ${pageSizeOptions}"
                         th:value="${option}"
                         th:text="${option}"
-                        th:selected="${option == pageSize}">10</option>
+                        th:selected="${option == pageSize}">
+                </option>
+
             </select>
+
             <input type="number"
                    name="customSize"
                    min="1"
                    placeholder="Livre"
-                   style="width: 82px; padding: 4px 6px;">
-            <button type="submit" class="xp-button" style="font-size: 11px;">Aplicar</button>
+                   style="width:82px; padding:4px 6px;">
+
+            <button type="submit"
+                    class="xp-button"
+                    style="font-size:11px;">
+                Aplicar
+            </button>
         </form>
 
-        <span style="margin-left: auto; font-weight: bold; color: #003099;">
+        <span style="margin-left:auto; font-weight:bold; color:#003099;">
             Piloto:
             <span th:text="${usuarioLogado}">Usuário</span>
         </span>
@@ -48,50 +68,58 @@
 
         <h2 class="xp-header-title"
             th:text="'Ranking - ' + ${corrida.nome}">
-            Ranking - Corrida
+            Ranking
         </h2>
 
         <table class="xp-table">
             <thead>
-                <tr>
-                    <th style="width: 60px;">Posição</th>
-                    <th>Participante</th>
-                    <th>Pontuação</th>
-                    <th>Data</th>
-                </tr>
+            <tr>
+                <th style="width:60px;">Posição</th>
+                <th>Participante</th>
+                <th>Pontuação</th>
+                <th>Data</th>
+            </tr>
             </thead>
 
             <tbody>
-                <tr th:each="r, stat : ${resultados}">
-                    <td th:text="${currentPage * pageSize + stat.count}">1</td>
-                    <td th:text="${r.participante.nome}">Nome</td>
-                    <td th:text="${r.pontuacao + ' pts'}">0 pts</td>
-                    <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}">
-                        Data
-                    </td>
-                </tr>
+            <tr th:each="r, stat : ${resultados}">
+                <td th:text="${currentPage * pageSize + stat.count}">1</td>
+                <td th:text="${r.participante.nome}">Nome</td>
+                <td th:text="${r.pontuacao + ' pts'}">0 pts</td>
+                <td th:text="${#temporals.format(r.dataHora, 'dd/MM/yyyy HH:mm')}">
+                    Data
+                </td>
+            </tr>
             </tbody>
         </table>
 
         <div style="margin-top:15px;text-align:center;">
 
             <a th:if="${currentPage > 0}"
-               th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage - 1}, size=${pageSize})}"
+               th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage - 1},size=${pageSize})}"
                class="xp-button">
-                Anterior
+                ◀ Anterior
             </a>
 
-            <span style="margin:0 15px;">
-                Página
-                <span th:text="${currentPage + 1}"></span>
-                de
-                <span th:text="${totalPages}"></span>
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+
+                <a th:if="${i != currentPage}"
+                   th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${i},size=${pageSize})}"
+                   class="xp-button"
+                   th:text="${i + 1}">
+                </a>
+
+                <span th:if="${i == currentPage}"
+                      style="font-weight:bold;padding:4px 8px;border:1px solid #003099;background:#dbe8ff;"
+                      th:text="${i + 1}">
+                </span>
+
             </span>
 
-            <a th:if="${currentPage + 1 lt totalPages}"
-                    th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage + 1}, size=${pageSize})}"
+            <a th:if="${currentPage + 1 < totalPages}"
+               th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage + 1},size=${pageSize})}"
                class="xp-button">
-                Próxima
+                Próxima ▶
             </a>
 
         </div>
