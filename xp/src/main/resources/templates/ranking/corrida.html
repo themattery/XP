@@ -88,7 +88,7 @@
                 <span th:text="${totalPages}"></span>
             </span>
 
-            <a th:if="${currentPage + 1 < totalPages}"
+            <a th:if="${currentPage + 1 lt totalPages}"
                     th:href="@{/ranking/corrida/{id}(id=${corrida.id},page=${currentPage + 1}, size=${pageSize})}"
                class="xp-button">
                 Próxima

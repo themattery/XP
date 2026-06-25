@@ -72,6 +72,7 @@ public class CorridaService {
         
         try {
             resultadoRepository.deleteByCorridaId(id);
+            perguntaRepository.deleteAlternativasByCorridaId(id);
             perguntaRepository.deleteByCorridaId(id);
             repository.removerVinculosParticipantes(id);
             repository.delete(corrida);
