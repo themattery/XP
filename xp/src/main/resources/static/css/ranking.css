@@ -139,3 +139,8 @@ body {
     background: #E5E5E5;
     box-shadow: inset 1px 1px 2px #666666;
 }
+
+.xp-button:hover {
+    background: linear-gradient(to bottom, #f4f8ff 0%, #d9e9ff 70%, #b7d2ff 100%);
+    border-color: #6d96d8;
+}

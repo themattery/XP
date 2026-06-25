@@ -248,39 +248,73 @@
         }
 
         /* Botão confirmar (estilo Windows XP) */
-        .xp-button {
-            margin-top: 24px;
-            text-align: center;
+        .xp-confirm-wrapper {
+            margin-top: 18px;
+            display: flex;
+            justify-content: center;
+            padding-top: 0;
+            border-top: none;
+            background: transparent;
+            width: 100%;
         }
 
-        .xp-button button {
-            background: linear-gradient(to bottom, #ece9d8, #d4d0c8);
+        .xp-confirm-wrapper button {
+            min-width: 118px;
+            font-family: var(--sans-serif, Tahoma, sans-serif);
+            -webkit-font-smoothing: antialiased;
+            font-size: 11px;
+            box-sizing: border-box;
             border: 1px solid #003c74;
-            border-radius: 4px;
-            padding: 8px 32px;
-            font-family: 'Segoe UI', 'Tahoma', sans-serif;
-            font-size: 12px;
-            font-weight: bold;
-            color: #003c74;
+            background: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 1) 0%,
+                rgba(236, 235, 229, 1) 86%,
+                rgba(216, 208, 196, 1) 100%
+            );
+            box-shadow: none;
+            border-radius: 3px;
+            padding: 4px 14px;
+            line-height: 1.2;
+            font-weight: normal;
+            color: #000;
             cursor: pointer;
             transition: all 0.1s;
-            box-shadow: inset 1px 1px 0 #fff, 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        .xp-button button:hover {
-            background: linear-gradient(to bottom, #f0f0ea, #e2e2d4);
-            border-color: #0054e3;
+        .xp-confirm-wrapper button:not(:disabled):active,
+        .xp-confirm-wrapper button:not(:disabled).active {
+            box-shadow: none;
+            background: linear-gradient(
+                180deg,
+                rgba(205, 202, 195, 1) 0%,
+                rgba(227, 227, 219, 1) 8%,
+                rgba(229, 229, 222, 1) 94%,
+                rgba(242, 242, 241, 1) 100%
+            );
         }
 
-        .xp-button button:active {
-            background: linear-gradient(to bottom, #d4d0c8, #c0bcb0);
-            transform: translateY(1px);
+        .xp-confirm-wrapper button:not(:disabled):hover {
+            box-shadow: inset -1px 1px #fff0cf, inset 1px 2px #fdd889, inset -2px 2px #fbc761, inset 2px -2px #e5a01a;
         }
 
-        .xp-button button:disabled {
+        .xp-confirm-wrapper button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+        }
+
+        .xp-confirm-wrapper button:focus,
+        .xp-confirm-wrapper button.focused {
+            box-shadow: inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6, inset 1px -1px #89ade4,
+                inset 2px -2px #89ade4;
+            outline: none;
+        }
+
+        .xp-confirm-wrapper button::-webkit-focus-inner {
+            border: 0;
+        }
+
+        .xp-confirm-wrapper button::-moz-focus-inner {
+            border: 0;
         }
 
         /* Feedback */
@@ -399,13 +433,13 @@
                         </label>
                     </div>
 
-                    <div class="xp-button">
+                    <div class="xp-confirm-wrapper">
                         <button type="submit" id="submitBtn">Confirmar resposta</button>
                     </div>
                 </form>
 
                 <div class="status-text">
-                    ⚠️ Por favor, não feche esta janela enquanto a pergunta estiver sendo processada.
+                    Por favor, não feche esta janela enquanto a pergunta estiver sendo processada.
                 </div>
             </div>
         </div>

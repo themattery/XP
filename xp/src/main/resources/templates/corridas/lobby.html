@@ -141,6 +141,25 @@
             box-shadow: inset 1px 1px 2px #666666;
         }
 
+        .admin-actions .btn-xp-clss:hover,
+        .acoes-corrida .btn-xp-clss:hover {
+            background: linear-gradient(to bottom, #f4f8ff 0%, #d9e9ff 70%, #b7d2ff 100%);
+            border-color: #6d96d8;
+        }
+
+        .acoes-corrida .btn-xp-clss--editar {
+            background: linear-gradient(to bottom, #fff8b8 0%, #f4d85f 70%, #e0b93a 100%);
+            border-color: #b58d12;
+            color: #4d3600 !important;
+            font-weight: bold;
+            box-shadow: inset -1px -1px 1px #b58d12;
+        }
+
+        .acoes-corrida .btn-xp-clss--editar:hover {
+            background: linear-gradient(to bottom, #fffacc 0%, #f8e27d 70%, #ebc84f 100%);
+            border-color: #c79f1b;
+        }
+
         /* Variação Verde para o Botão Iniciar/Novo */
         .btn-xp-clss--iniciar {
             background: linear-gradient(to bottom, #9cd867 0%, #70b33b 70%, #559624 100%);
@@ -264,7 +283,7 @@
                                     
                                     <a th:if="${session.usuarioAdmin == true}"
                                         th:href="@{/corridas/{id}/editar(id=${corrida.id})}"
-                                        class="btn-xp-clss">Editar</a>
+                                        class="btn-xp-clss btn-xp-clss--editar">Editar</a>
                                     
                                     <form th:if="${session.usuarioAdmin == true}"
                                         th:action="@{/corridas/{id}/excluir(id=${corrida.id})}" method="post"

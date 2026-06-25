@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,40 @@ public class PerguntaService {
         pergunta.setCorrida(corrida);
         // Atribui o nome da imagem obtido no upload para salvar no banco
         pergunta.setImagem(nomeImagem);
+        return repository.save(pergunta);
+    }
+
+    @Transactional
+    public Pergunta atualizar(Long perguntaId,
+                              Long corridaId,
+                              String enunciado,
+                              List<String> alternativas,
+                              Integer respostaCorreta,
+                              MultipartFile imagemFile,
+                              boolean removerImagem) {
+        Pergunta pergunta = buscarPorId(perguntaId);
+        if (!pergunta.getCorrida().getId().equals(corridaId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pergunta não pertence a esta corrida");
+        }
+
+        List<String> alternativasValidas = filtrarAlternativas(alternativas);
+        validarDados(enunciado, alternativasValidas, respostaCorreta);
+
+        String imagemAnterior = pergunta.getImagem();
+
+        pergunta.setEnunciado(enunciado.trim());
+        pergunta.setAlternativas(new ArrayList<>(alternativasValidas));
+        pergunta.setRespostaCorreta(respostaCorreta);
+
+        if (imagemFile != null && !imagemFile.isEmpty()) {
+            br.edu.ifpb.pweb2.xp.config.UploadUtil.excluirImagem(imagemAnterior);
+            String nomeNovo = br.edu.ifpb.pweb2.xp.config.UploadUtil.salvarImagem(imagemFile);
+            pergunta.setImagem(nomeNovo);
+        } else if (removerImagem) {
+            br.edu.ifpb.pweb2.xp.config.UploadUtil.excluirImagem(imagemAnterior);
+            pergunta.setImagem(null);
+        }
+
         return repository.save(pergunta);
     }
 

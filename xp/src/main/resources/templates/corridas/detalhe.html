@@ -12,11 +12,12 @@
     <div class="login-screen__center">
         <div class="jogo-header">
             <h1 th:text="${corrida.nome}">Nome da Corrida</h1>
-            <p th:text="${corrida.descricao}">Descrição</p>
+            <p th:if="${corrida.ativa}" style="color:#0a6;">Corrida ativa</p>
+            <p th:unless="${corrida.ativa}" style="color:#a00;">Corrida inativa</p>
         </div>
 
         <div class="jogo-content" style="max-width:700px;">
-            <p><strong>Tempo limitado:</strong> <span th:text="${corrida.tempoLimitadoSegundos != null ? corrida.tempoLimitadoSegundos + ' segundos' : 'Sem limite'}">--</span></p>
+            <p><strong>Tempo limitado:</strong> <span th:text="${corrida.tempoLimiteSegundos != null ? corrida.tempoLimiteSegundos + ' segundos' : 'Sem limite'}">--</span></p>
 
             <div style="margin-top:20px; display:flex; gap:10px;">
                 <form th:action="@{/corridas/{id}/iniciar(id=${corrida.id})}" method="post">

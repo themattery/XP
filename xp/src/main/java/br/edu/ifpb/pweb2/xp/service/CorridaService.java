@@ -51,9 +51,14 @@ public class CorridaService {
         
         if (corrida.getId() == null) {
             corrida.setAtiva(true);
+            return repository.save(corrida);
         }
-        
-        return repository.save(corrida);
+
+        Corrida existente = buscarPorId(corrida.getId());
+        existente.setNome(corrida.getNome());
+        existente.setTempoLimiteSegundos(corrida.getTempoLimiteSegundos());
+        existente.setAtiva(corrida.getAtiva());
+        return repository.save(existente);
     }
 
     public Corrida buscarPorId(Long id) {
@@ -65,19 +70,11 @@ public class CorridaService {
     public void excluir(Long id) {
         Corrida corrida = buscarPorId(id);
         
-        long totalResultados = resultadoRepository.countByCorridaId(id);
-        if (totalResultados > 0) {
-            throw new BusinessException(
-                "❌ Não é possível excluir a corrida \"" + corrida.getNome() +
-                "\" pois ela já possui " + totalResultados + " resultado(s) registrado(s)."
-            );
-        }
-        
         try {
+            resultadoRepository.deleteByCorridaId(id);
             perguntaRepository.deleteByCorridaId(id);
             repository.removerVinculosParticipantes(id);
-            repository.deleteById(id);
-            
+            repository.delete(corrida);
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(
                 "Não foi possível excluir a corrida \"" + corrida.getNome() +

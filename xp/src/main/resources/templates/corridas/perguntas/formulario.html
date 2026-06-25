@@ -56,6 +56,28 @@
             font-size: 1em;
         }
 
+        .form-group input[type="file"] {
+            display: block;
+            width: 100%;
+        }
+
+        .imagem-atual {
+            max-width: 180px;
+            max-height: 120px;
+            display: block;
+            margin-top: 10px;
+            border: 1px solid #bdbeaf;
+            border-radius: 4px;
+        }
+
+        .imagem-remover {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            color: #003366;
+        }
+
         .alternativa-item {
             display: flex;
             align-items: center;
@@ -78,6 +100,31 @@
             margin-top: 24px;
         }
 
+        .btn-xp-clss {
+            display: inline-block;
+            text-decoration: none;
+            font-family: Tahoma, sans-serif;
+            font-size: 11px;
+            color: #000000 !important;
+            background: linear-gradient(to bottom, #ffffff 0%, #f0f0ea 70%, #e2e2d4 100%);
+            border: 1px solid #707070;
+            border-radius: 3px;
+            padding: 4px 12px;
+            cursor: pointer;
+            box-shadow: inset -1px -1px 1px #999999, 1px 1px 2px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn-xp-clss:hover {
+            background: linear-gradient(to bottom, #fff8dd 0%, #ffeeb5 70%, #ffdd75 100%);
+            border-color: #ffb515;
+        }
+
+        .btn-xp-clss:active {
+            background: #e5e5e5;
+            box-shadow: inset 1px 1px 2px #666666;
+        }
+
         .btn-cancelar {
             color: #666;
             text-decoration: none;
@@ -93,46 +140,50 @@
     <div class="login-screen__center">
 
         <div class="form-header">
-            <h1>➕ Nova Pergunta</h1>
+            <h1>Nova Pergunta</h1>
             <p th:text="'Corrida: ' + ${corrida.nome}">Corrida</p>
         </div>
 
         <div class="form-content">
-            <form th:action="@{/corridas/{id}/perguntas/salvar(id=${corrida.id})}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/corridas/{corridaId}/perguntas/salvar(corridaId=${corrida.id})}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="perguntaId" th:value="${pergunta.id}" th:if="${edicao}" />
 
                 <div class="form-group">
                     <label for="enunciado">Enunciado:</label>
-                    <input type="text" id="enunciado" name="enunciado"
+                    <input type="text" id="enunciado" name="enunciado" th:value="${pergunta.enunciado}"
                            placeholder="Digite a pergunta" required>
                 </div>
 
                 <div class="form-group">
                     <label for="imagemFile">Imagem da Pergunta (Opcional):</label>
                     <input type="file" id="imagemFile" name="imagemFile" accept="image/*">
+                    <img th:if="${edicao and pergunta.imagem != null}" th:src="@{/imagens-upload/{nome}(nome=${pergunta.imagem})}" class="imagem-atual" alt="Imagem atual da pergunta">
+                    <label class="imagem-remover" th:if="${edicao and pergunta.imagem != null}">
+                        <input type="checkbox" name="removerImagem" value="true">
+                        Remover imagem atual
+                    </label>
                 </div>
 
                 <div class="form-group">
                     <label>Alternativas (marque a correta):</label>
 
                     <div class="alternativa-item">
-                        <input type="radio" name="respostaCorreta" value="0" required>
-                        <input type="text" name="alternativas" placeholder="Alternativa A" required>
+                        <input type="radio" name="respostaCorreta" value="0" th:checked="${pergunta.respostaCorreta == 0}" required>
+                        <input type="text" name="alternativas" placeholder="Alternativa A" th:value="${pergunta.alternativas != null and pergunta.alternativas.size() > 0 ? pergunta.alternativas[0] : ''}" required>
                     </div>
                     <div class="alternativa-item">
-                        <input type="radio" name="respostaCorreta" value="1">
-                        <input type="text" name="alternativas" placeholder="Alternativa B" required>
+                        <input type="radio" name="respostaCorreta" value="1" th:checked="${pergunta.respostaCorreta == 1}">
+                        <input type="text" name="alternativas" placeholder="Alternativa B" th:value="${pergunta.alternativas != null and pergunta.alternativas.size() > 1 ? pergunta.alternativas[1] : ''}" required>
                     </div>
                     <div class="alternativa-item">
-                        <input type="radio" name="respostaCorreta" value="2">
-                        <input type="text" name="alternativas" placeholder="Alternativa C" required>
+                        <input type="radio" name="respostaCorreta" value="2" th:checked="${pergunta.respostaCorreta == 2}">
+                        <input type="text" name="alternativas" placeholder="Alternativa C" th:value="${pergunta.alternativas != null and pergunta.alternativas.size() > 2 ? pergunta.alternativas[2] : ''}" required>
                     </div>
                 </div>
 
                 <div class="button-group">
-                    <a th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}" class="btn-cancelar">Cancelar</a>
-                    <button type="submit" class="login-screen__submit" style="padding: 10px 28px; width: auto;">
-                        Salvar Pergunta
-                    </button>
+                    <a th:href="@{/corridas}" class="btn-xp-clss">Voltar ao lobby</a>
+                    <button type="submit" class="login-screen__submit" style="padding: 10px 28px; width: auto;" th:text="${edicao} ? 'Atualizar Pergunta' : 'Salvar Pergunta'">Salvar Pergunta</button>
                 </div>
             </form>
         </div>

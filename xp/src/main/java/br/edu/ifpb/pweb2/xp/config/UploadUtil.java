@@ -44,6 +44,21 @@ public class UploadUtil {
         }
     }
 
+    public static void excluirImagem(String nomeArquivo) {
+        if (nomeArquivo == null || nomeArquivo.isBlank()) {
+            return;
+        }
+
+        try {
+            Path arquivo = DIRETORIO_UPLOADS.resolve(nomeArquivo).normalize();
+            if (Files.exists(arquivo)) {
+                Files.delete(arquivo);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao excluir o ficheiro físico da imagem.", e);
+        }
+    }
+
     public static String getDiretorioUploads() {
         return DIRETORIO_UPLOADS.toString();
     }

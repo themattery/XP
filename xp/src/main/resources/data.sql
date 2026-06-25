@@ -249,3 +249,182 @@ SELECT p.id, 'HttpSession' FROM pergunta p WHERE p.enunciado = 'O que guarda dad
 INSERT INTO pergunta_alternativas (pergunta_id, alternativas)
 SELECT p.id, 'HashMap estático' FROM pergunta p WHERE p.enunciado = 'O que guarda dados do usuário entre requisições no servidor?'
   AND NOT EXISTS (SELECT 1 FROM pergunta_alternativas pa WHERE pa.pergunta_id = p.id AND pa.alternativas = 'HashMap estático');
+
+-- Participantes extras para demonstrar paginação no ranking ------------------
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 01', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 01');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 02', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 02');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 03', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 03');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 04', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 04');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 05', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 05');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 06', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 06');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 07', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 07');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 08', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 08');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 09', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 09');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 10', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 10');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 11', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 11');
+
+INSERT INTO participante (nome, admin, senha)
+SELECT 'Aluno 12', FALSE, '$2a$10$104dQY2xr05gZOhPLMgBp.7eGgrVaYU669dDlmGCyMG8NCs4E/cxu'
+WHERE NOT EXISTS (SELECT 1 FROM participante WHERE nome = 'Aluno 12');
+
+-- Resultados extras para evidenciar paginação no ranking ---------------------
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 10, '2026-06-25 10:00:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Admin'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (
+    SELECT 1 FROM resultado r
+    WHERE r.participante_id = p.id AND r.corrida_id = c.id
+  );
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 9, '2026-06-25 10:01:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'João'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (
+    SELECT 1 FROM resultado r
+    WHERE r.participante_id = p.id AND r.corrida_id = c.id
+  );
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 8, '2026-06-25 10:02:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Maria'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (
+    SELECT 1 FROM resultado r
+    WHERE r.participante_id = p.id AND r.corrida_id = c.id
+  );
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 7, '2026-06-25 10:03:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 01'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 6, '2026-06-25 10:04:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 02'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 5, '2026-06-25 10:05:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 03'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 4, '2026-06-25 10:06:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 04'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 3, '2026-06-25 10:07:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 05'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 2, '2026-06-25 10:08:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 06'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 1, '2026-06-25 10:09:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 07'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 0, '2026-06-25 10:10:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 08'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 9, '2026-06-25 10:11:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 09'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 8, '2026-06-25 10:12:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 10'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 7, '2026-06-25 10:13:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 11'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);
+
+INSERT INTO resultado (participante_id, corrida_id, pontuacao, data_hora)
+SELECT p.id, c.id, 6, '2026-06-25 10:14:00'
+FROM participante p
+CROSS JOIN corrida c
+WHERE p.nome = 'Aluno 12'
+  AND c.nome = 'Grande Prêmio XP'
+  AND NOT EXISTS (SELECT 1 FROM resultado r WHERE r.participante_id = p.id AND r.corrida_id = c.id);

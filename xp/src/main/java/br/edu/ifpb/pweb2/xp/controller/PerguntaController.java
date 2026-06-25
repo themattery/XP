@@ -1,6 +1,7 @@
 package br.edu.ifpb.pweb2.xp.controller;
 
 import br.edu.ifpb.pweb2.xp.config.UploadUtil;
+import br.edu.ifpb.pweb2.xp.model.Pergunta;
 import br.edu.ifpb.pweb2.xp.service.CorridaService;
 import br.edu.ifpb.pweb2.xp.service.PerguntaService;
 import jakarta.servlet.http.HttpSession;
@@ -54,6 +55,30 @@ public class PerguntaController {
 
         ModelAndView model = new ModelAndView("corridas/perguntas/formulario");
         model.addObject("corrida", corridaService.buscarPorId(corridaId));
+        model.addObject("pergunta", new Pergunta());
+        model.addObject("edicao", false);
+        return model;
+    }
+
+    @GetMapping("/{perguntaId}/editar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView editar(@PathVariable Long corridaId,
+                               @PathVariable Long perguntaId,
+                               HttpSession session) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return new ModelAndView(redirect);
+        }
+
+        Pergunta pergunta = perguntaService.buscarPorId(perguntaId);
+        if (!pergunta.getCorrida().getId().equals(corridaId)) {
+            return new ModelAndView("redirect:/corridas/" + corridaId + "/perguntas");
+        }
+
+        ModelAndView model = new ModelAndView("corridas/perguntas/formulario");
+        model.addObject("corrida", corridaService.buscarPorId(corridaId));
+        model.addObject("pergunta", pergunta);
+        model.addObject("edicao", true);
         return model;
     }
 
@@ -61,10 +86,12 @@ public class PerguntaController {
     @PreAuthorize("hasRole('ADMIN')")
     public String salvar(
             @PathVariable Long corridaId,
+            @RequestParam(required = false) Long perguntaId,
             @RequestParam String enunciado,
             @RequestParam List<String> alternativas,
             @RequestParam Integer respostaCorreta,
             @RequestParam(value = "imagemFile", required = false) MultipartFile imagemFile,
+            @RequestParam(value = "removerImagem", defaultValue = "false") boolean removerImagem,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
@@ -73,12 +100,38 @@ public class PerguntaController {
             return redirect;
         }
 
-        // Processa o arquivo físico no HD e retorna o nome único (String) gerado
-        String nomeImagem = UploadUtil.salvarImagem(imagemFile);
+        if (perguntaId == null) {
+            String nomeImagem = UploadUtil.salvarImagem(imagemFile);
+            perguntaService.salvar(corridaId, enunciado, alternativas, respostaCorreta, nomeImagem);
+            redirectAttributes.addFlashAttribute("mensagem", "Pergunta cadastrada com sucesso.");
+            return "redirect:/corridas/" + corridaId + "/perguntas/confirmar-pergunta";
+        } else {
+            perguntaService.atualizar(
+                    perguntaId,
+                    corridaId,
+                    enunciado,
+                    alternativas,
+                    respostaCorreta,
+                    imagemFile,
+                    removerImagem);
 
-        perguntaService.salvar(corridaId, enunciado, alternativas, respostaCorreta, nomeImagem);
-        redirectAttributes.addFlashAttribute("mensagem", "Pergunta cadastrada com sucesso.");
-        return "redirect:/corridas/" + corridaId + "/perguntas";
+            redirectAttributes.addFlashAttribute("mensagem", "Pergunta atualizada com sucesso.");
+            return "redirect:/corridas/" + corridaId + "/perguntas";
+        }
+    }
+
+    @GetMapping("/confirmar-pergunta")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView confirmar(@PathVariable Long corridaId, HttpSession session) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return new ModelAndView(redirect);
+        }
+
+        ModelAndView model = new ModelAndView("corridas/perguntas/confirmar");
+        model.addObject("corrida", corridaService.buscarPorId(corridaId));
+        model.addObject("modo", "pergunta");
+        return model;
     }
 
     @PostMapping("/{perguntaId}/excluir")

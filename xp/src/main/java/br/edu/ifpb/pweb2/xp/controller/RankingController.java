@@ -18,7 +18,8 @@ import java.util.List;
 @RequestMapping("/ranking")
 public class RankingController {
 
-    private static final int TAMANHO_PAGINA = 10;
+    private static final int TAMANHO_PADRAO = 10;
+    private static final List<Integer> TAMANHOS_PRE_DEFINIDOS = List.of(2, 5, 10, 20);
 
     @Autowired
     private ResultadoService resultadoService;
@@ -41,6 +42,7 @@ public class RankingController {
         model.addObject("resultados", resultadosPage.getContent());
         model.addObject("currentPage", page);
         model.addObject("pageSize", size);
+        model.addObject("pageSizeOptions", TAMANHOS_PRE_DEFINIDOS);
         model.addObject("totalPages", resultadosPage.getTotalPages());
         model.addObject("totalItems", resultadosPage.getTotalElements());
         model.addObject("usuarioLogado", session.getAttribute("usuario"));
@@ -65,6 +67,7 @@ public class RankingController {
         model.addObject("resultados", resultadosPage.getContent());
         model.addObject("currentPage", page);
         model.addObject("pageSize", size);
+        model.addObject("pageSizeOptions", TAMANHOS_PRE_DEFINIDOS);
         model.addObject("totalPages", resultadosPage.getTotalPages());
         model.addObject("totalItems", resultadosPage.getTotalElements());
         model.addObject("usuarioLogado", session.getAttribute("usuario"));
@@ -73,7 +76,6 @@ public class RankingController {
     }
 
     private int validarTamanhoPagina(int size) {
-        List<Integer> tamanhosPermitidos = List.of(5, 10, 20, 50);
-        return tamanhosPermitidos.contains(size) ? size : 10;
+        return size > 0 && size <= 100 ? size : TAMANHO_PADRAO;
     }
 }

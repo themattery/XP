@@ -88,28 +88,18 @@
             color: #2e7d32;
         }
 
-        .btn-admin {
-            text-decoration: none;
-            padding: 6px 12px;
-            font-size: 0.85em;
-            border: none;
-            cursor: pointer;
-            font-family: Tahoma, sans-serif;
+        .acoes-pergunta {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .btn-admin--excluir {
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #e53935;
+        .acoes-pergunta form {
+            margin: 0;
         }
-
-        .btn-voltar {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.95em;
-        }
-
-        .btn-voltar:hover { text-decoration: underline; }
 
         .pergunta-imagem {
             display: block;
@@ -131,7 +121,7 @@
     <div class="login-screen__center">
 
         <div class="page-header">
-            <h1>❓ Perguntas</h1>
+            <h1>Perguntas</h1>
             <p th:text="'Corrida: ' + ${corrida.nome}">Corrida</p>
         </div>
 
@@ -140,11 +130,11 @@
             <p th:if="${mensagem != null}" class="lobby-mensagem" th:text="${mensagem}"></p>
 
             <div class="admin-actions">
-                <a th:href="@{/corridas}" class="btn-voltar">← Voltar ao lobby</a>
+                <a th:href="@{/corridas}" class="btn-xp-clss" style="padding: 6px 16px; font-weight: bold;">Voltar ao lobby</a>
                 <a th:href="@{/corridas/{id}/perguntas/novo(id=${corrida.id})}"
-                   class="login-screen__submit"
-                   style="text-decoration: none; padding: 8px 20px;">
-                    + Nova Pergunta
+                   class="btn-xp-clss btn-xp-clss--iniciar"
+                   style="padding: 6px 16px; font-weight: bold;">
+                    Nova Pergunta
                 </a>
             </div>
 
@@ -178,11 +168,18 @@
                             </ul>
                         </td>
                         <td style="text-align: center;">
-                            <form th:action="@{/corridas/{cid}/perguntas/{pid}/excluir(cid=${corrida.id}, pid=${pergunta.id})}"
-                                  method="post"
-                                  onsubmit="return confirm('Excluir esta pergunta?');">
-                                <button type="submit" class="btn-admin btn-admin--excluir">Excluir</button>
-                            </form>
+                            <div class="acoes-pergunta">
+                                <a th:href="@{/corridas/{cid}/perguntas/{pid}/editar(cid=${corrida.id}, pid=${pergunta.id})}"
+                                   class="btn-xp-clss btn-xp-clss--editar"
+                                   style="padding: 6px 14px; font-weight: bold;">
+                                    Editar
+                                </a>
+                                <form th:action="@{/corridas/{cid}/perguntas/{pid}/excluir(cid=${corrida.id}, pid=${pergunta.id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Excluir esta pergunta?');">
+                                    <button type="submit" class="btn-xp-clss btn-xp-clss--excluir" style="padding: 6px 14px; font-weight: bold;">Excluir</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(perguntas)}">

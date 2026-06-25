@@ -1,12 +1,12 @@
 body {
     margin: 0;
     font-family: Tahoma, sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .login-screen {
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #508fd9;
     color: white;
     display: flex;
@@ -40,6 +40,8 @@ body {
 .login-screen__center {
     flex: 1;
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     background-image: radial-gradient(
         circle,
@@ -49,6 +51,37 @@ body {
 
     background-repeat: no-repeat;
     background-position: -200px center;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .login-screen__center {
+        flex-direction: column;
+        background-position: center top;
+    }
+
+    .login-screen__instructions,
+    .login-screen__accounts,
+    .login-screen__center > div {
+        width: 100%;
+        padding: 0;
+    }
+
+    .login-screen__instructions {
+        padding-right: 20px;
+        align-items: center;
+        border-right: none;
+    }
+
+    .login-screen__accounts {
+        padding-left: 20px;
+    }
+
+    .login-screen__submit,
+    .btn-cancelar {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 /* LADO ESQUERDO */
@@ -189,9 +222,202 @@ body {
     filter: brightness(1.1);
 }
 
+.login-screen__message {
+    display: block;
+    margin-top: 14px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.login-screen__message--error {
+    color: #d40000;
+}
+
+.btn-xp-clss {
+    display: inline-block;
+    text-decoration: none;
+    font-family: Tahoma, sans-serif;
+    font-size: 11px;
+    color: #000000 !important;
+    background: linear-gradient(to bottom, #ffffff 0%, #f0f0ea 70%, #e2e2d4 100%);
+    border: 1px solid #707070;
+    border-radius: 3px;
+    padding: 4px 12px;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 1px #999999, 1px 1px 2px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.btn-xp-clss:hover {
+    background: linear-gradient(to bottom, #f4f8ff 0%, #d9e9ff 70%, #b7d2ff 100%);
+    border-color: #6d96d8;
+}
+
+.btn-xp-clss:active {
+    background: #e5e5e5;
+    box-shadow: inset 1px 1px 2px #666666;
+}
+
+.btn-xp-clss--editar {
+    background: linear-gradient(to bottom, #fff8b8 0%, #f4d85f 70%, #e0b93a 100%);
+    border-color: #b58d12;
+    color: #4d3600 !important;
+    font-weight: bold;
+    box-shadow: inset -1px -1px 1px #b58d12;
+}
+
+.btn-xp-clss--editar:hover {
+    background: linear-gradient(to bottom, #fffacc 0%, #f8e27d 70%, #ebc84f 100%);
+    border-color: #c79f1b;
+}
+
+.btn-xp-clss--excluir {
+    background: linear-gradient(to bottom, #fca3a3 0%, #f36c6c 70%, #ce2d2d 100%);
+    border-color: #961313;
+    color: #ffffff !important;
+    font-weight: bold;
+    box-shadow: inset -1px -1px 1px #961313;
+}
+
+.btn-xp-clss--excluir:hover {
+    background: linear-gradient(to bottom, #ffbebe 0%, #ff8787 70%, #e54444 100%);
+    border-color: #b21e1e;
+}
+
 /* TEXTO INFERIOR */
 
 .login-screen__login-info span {
     opacity: 0.9;
 }
 
+    .xp-card {
+        background: linear-gradient(180deg, #e3edff 0%, #b7c9e8 100%);
+        border: 1px solid #7a97c2;
+        border-radius: 8px;
+        box-shadow: 0 0 18px rgba(0, 0, 0, 0.18);
+    }
+
+    .xp-card-header {
+        background: linear-gradient(180deg, #dde8ff 0%, #a7bde0 100%);
+        border-bottom: 1px solid #7a97c2;
+        padding: 14px 18px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #10305b;
+        text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .xp-card-body {
+        padding: 22px 18px 24px;
+        color: #15315f;
+        line-height: 1.5;
+    }
+
+    .xp-button {
+        background: linear-gradient(180deg, #d8e4fb 0%, #a7bef7 100%);
+        border: 1px solid #627db6;
+        color: #122f58;
+        border-radius: 4px;
+        font-weight: bold;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .xp-button:hover {
+        background: linear-gradient(180deg, #c3d8f7 0%, #7c9ee5 100%);
+    }
+
+    .xp-button-secondary {
+        background: linear-gradient(180deg, #f0f4ff 0%, #d4daf2 100%);
+        border: 1px solid #99a8cd;
+        color: #10284c;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    .xp-button-secondary:hover {
+        background: linear-gradient(180deg, #e2e8ff 0%, #b8c5eb 100%);
+    }
+
+    .xp-dialog-overlay {
+        width: 100%;
+        min-height: calc(100vh - 16px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .xp-dialog {
+        width: 100%;
+        max-width: 560px;
+        background: #dfeaff;
+        border: 2px solid #4f6db7;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.25);
+        border-radius: 4px;
+    }
+
+    .xp-dialog-title {
+        background: linear-gradient(180deg, #4a65a6 0%, #2d3f82 100%);
+        color: white;
+        padding: 10px 14px;
+        font-weight: bold;
+        border-bottom: 1px solid #2c3a74;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    }
+
+    .xp-dialog-body {
+        display: flex;
+        gap: 18px;
+        padding: 24px 22px;
+        color: #12294d;
+    }
+
+    .xp-dialog-icon {
+        width: 50px;
+        height: 50px;
+        background: #fff;
+        border: 2px solid #8c9fd6;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: #2c4a8a;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .xp-dialog-text {
+        flex: 1;
+    }
+
+    .xp-dialog-message {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+    .xp-dialog-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        padding: 0 20px 20px;
+    }
+
+    .xp-button,
+    .xp-button-secondary {
+        min-width: 110px;
+        text-align: center;
+    }
+
+    @media (max-width: 520px) {
+        .xp-dialog-body {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .xp-dialog-buttons {
+            justify-content: center;
+        }
+    }

@@ -3,6 +3,9 @@ package br.edu.ifpb.pweb2.xp.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 public class Corrida {
@@ -17,5 +20,11 @@ public class Corrida {
     private Integer tempoLimiteSegundos;
 
     private Boolean ativa = true;
+
+    @OneToMany(mappedBy = "corrida", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Pergunta> perguntas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "corrida", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resultado> resultados = new ArrayList<>();
 
 }

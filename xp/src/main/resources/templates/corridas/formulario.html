@@ -2,7 +2,7 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${edicao} ? 'XP Corridas - Editar Pergunta' : 'XP Corridas - Nova Pergunta'">XP Corridas - Pergunta</title>
+    <title th:text="${edicao} ? 'XP Corridas - Editar Corrida' : 'XP Corridas - Nova Corrida'">XP Corridas - Corrida</title>
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <style>
         body, html { margin: 0; padding: 0; height: 100%; }
@@ -51,8 +51,8 @@
             color: #00489a;
         }
 
-        .form-group input[type="text"], 
-        .form-group input[type="file"] {
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -65,14 +65,6 @@
             outline: none;
             border-color: #0058e3;
             box-shadow: 0 0 5px rgba(0,88,227,0.3);
-        }
-
-        .alternativas-bucket {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px dashed #00489a;
-            margin-bottom: 15px;
         }
 
         .button-group {
@@ -92,6 +84,13 @@
         .btn-cancelar:hover {
             text-decoration: underline;
         }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -99,50 +98,35 @@
         <div class="login-screen__top"></div>
 
         <div class="login-screen__center">
-            
             <div class="form-header">
-                <h1 th:text="${edicao} ? '✏️ Editar Pergunta' : '🆕 Nova Pergunta'">Nova Pergunta</h1>
-                <p>Corrida: <strong th:text="${corrida.nome}">Nome da Corrida</strong></p>
+                <h1 th:text="${edicao} ? '✏️ Editar Corrida' : '🆕 Nova Corrida'">Nova Corrida</h1>
+                <p th:if="${edicao}">Atualize os dados desta corrida.</p>
+                <p th:unless="${edicao}">Cadastre uma nova corrida.</p>
             </div>
 
             <div class="form-content">
-                <form th:action="@{/corridas/{id}/perguntas/salvar(id=${corrida.id})}" th:object="${pergunta}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/corridas/salvar}" th:object="${corrida}" method="post">
+                    <input type="hidden" th:field="*{id}" />
 
                     <div class="form-group">
-                        <label for="enunciado">Enunciado da Pergunta:</label>
-                        <input type="text" id="enunciado" name="enunciado" placeholder="Ex: Qual é a sintaxe correta para..." required>
+                        <label for="nome">Nome da Corrida</label>
+                        <input type="text" id="nome" th:field="*{nome}" placeholder="Ex: Grande Prêmio XP" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="imagemFile">Imagem Ilustrativa (Opcional):</label>
-                        <input type="file" id="imagemFile" name="imagemFile" accept="image/*">
+                        <label for="tempoLimiteSegundos">Tempo limite (segundos)</label>
+                        <input type="number" id="tempoLimiteSegundos" th:field="*{tempoLimiteSegundos}" min="10" required>
                     </div>
 
-                    <div class="alternativas-bucket">
-                        <label style="font-family: 'Tahoma', sans-serif; font-weight: bold; color: #00489a; display:block; margin-bottom: 10px;">
-                            Alternativas:
-                        </label>
-                        
-                        <div class="form-group">
-                            <label>Alternativas (marque a correta):</label>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="ativa" th:field="*{ativa}" />
+                        <label for="ativa">Corrida ativa</label>
+                    </div>
 
-                            <div class="alternativa-item">
-                                <input type="radio" name="respostaCorreta" value="0" required>
-                                <input type="text" name="alternativas[0]" placeholder="Alternativa A" required>
-                            </div>
-                            <div class="alternativa-item">
-                                <input type="radio" name="respostaCorreta" value="1">
-                                <input type="text" name="alternativas[1]" placeholder="Alternativa B" required>
-                            </div>
-                            <div class="alternativa-item">
-                                <input type="radio" name="respostaCorreta" value="2">
-                                <input type="text" name="alternativas[2]" placeholder="Alternativa C" required>
-                            </div>
-                        </div>
                     <div class="button-group">
-                        <a th:href="@{/corridas/{id}/perguntas(id=${corrida.id})}" class="btn-cancelar">Cancelar</a>
-                        <button type="submit" class="login-screen__submit" style="padding: 10px 30px; width: auto;">
-                            Salvar Pergunta
+                        <a th:href="@{/corridas}" class="btn-xp-clss">Cancelar</a>
+                        <button type="submit" class="btn-xp-clss btn-xp-clss--iniciar" style="padding: 6px 16px; font-weight: bold;">
+                            Salvar Corrida
                         </button>
                     </div>
                 </form>

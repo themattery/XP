@@ -88,14 +88,28 @@ public class CorridaController {
 
         try {
             boolean nova = corrida.getId() == null;
-            service.salvar(corrida);
+            Corrida corridaSalva = service.salvar(corrida);
             redirectAttributes.addFlashAttribute("mensagem",
                     nova ? "Corrida cadastrada com sucesso!" : "Corrida atualizada com sucesso!");
-            return "redirect:/corridas";
+            return nova ? "redirect:/corridas/" + corridaSalva.getId() + "/perguntas/confirmar-corrida" : "redirect:/corridas";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro", "❌ Erro ao salvar corrida: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("erro", "Erro ao salvar corrida: " + e.getMessage());
             return "redirect:/corridas/novo";
         }
+    }
+
+    @GetMapping("/{id}/perguntas/confirmar-corrida")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView confirmarCadastroPerguntas(@PathVariable Long id, HttpSession session) {
+        String redirect = exigirAdmin(session);
+        if (redirect != null) {
+            return new ModelAndView(redirect);
+        }
+
+        ModelAndView model = new ModelAndView("corridas/perguntas/confirmar");
+        model.addObject("corrida", service.buscarPorId(id));
+        model.addObject("modo", "corrida");
+        return model;
     }
 
     @PostMapping("/{id}/excluir")
@@ -108,19 +122,11 @@ public class CorridaController {
 
         try {
             Corrida corrida = service.buscarPorId(id);
-            
-            if (service.possuiResultados(id)) {
-                redirectAttributes.addFlashAttribute("erro", 
-                    "❌ Não é possível excluir a corrida \"" + corrida.getNome() +
-                    "\" pois ela já possui resultados registrados.");
-                return "redirect:/corridas";
-            }
-            
             service.excluir(id);
             redirectAttributes.addFlashAttribute("mensagem", "Corrida \"" + corrida.getNome() + "\" excluída com sucesso!");
-            
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro", "❌ " + e.getMessage());
+            redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
         return "redirect:/corridas";
     }
@@ -162,12 +168,8 @@ public class CorridaController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView detalhe(@PathVariable Long id, ModelAndView model) {
-        model.setViewName("corridas/detalhe");
-        model.addObject("corrida", service.buscarPorId(id));
-        model.addObject("totalPerguntas", perguntaService.contarPorCorrida(id));
-        model.addObject("possuiResultados", service.possuiResultados(id));
-        return model;
+    public String detalhe(@PathVariable Long id) {
+        return "redirect:/corridas/" + id + "/perguntas";
     }
 
     private String exigirAdmin(HttpSession session) {

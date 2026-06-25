@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar cadastro de perguntas</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+    <div class="login-screen">
+        <div class="xp-dialog-overlay">
+            <div class="xp-dialog">
+                <div class="xp-dialog-title">Confirmar ação</div>
+                <div class="xp-dialog-body">
+                    <div class="xp-dialog-icon">?</div>
+                    <div class="xp-dialog-text">
+                        <p class="xp-dialog-message" th:if="${modo == 'corrida'}" th:text="'A corrida foi cadastrada com sucesso. Deseja cadastrar uma pergunta para a corrida ' + ${corrida.nome} + '?'">A corrida foi cadastrada com sucesso.</p>
+                        <p class="xp-dialog-message" th:if="${modo == 'pergunta'}" th:text="'A pergunta foi cadastrada com sucesso. Deseja cadastrar mais uma pergunta para a corrida ' + ${corrida.nome} + '?'">A pergunta foi cadastrada com sucesso.</p>
+                    </div>
+                </div>
+                <div class="xp-dialog-buttons">
+                    <a th:href="@{/corridas/{id}/perguntas/novo(id=${corrida.id})}" class="xp-button" th:text="${modo == 'pergunta'} ? 'Sim, cadastrar mais uma' : 'Sim, cadastrar pergunta'">Sim</a>
+                    <a th:href="@{/corridas}" class="xp-button-secondary">Não, voltar ao lobby</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
